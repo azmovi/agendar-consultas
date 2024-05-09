@@ -7,27 +7,86 @@
 <head>
     <title>BuscarX</title>
     <style>
-        .conteiner_site {
-            margin: 9%;
+        body {
+
+            margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
-            padding: 4% 4% 4% 4%;
+            padding: 5%;
         }
-        .login_button {
+
+        header{
+            display: grid;
+            grid-auto-flow : column;
+            place-items: center;
         }
+
+        .usuarios {
+
+            margin: 9%;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 5%;
+
+            justify-items: center;
+
+            display: grid;
+            grid-auto-flow: column;
+        }
+
+        .btn {
+            margin: 5px;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 1em;
+
+            font-weight: bold;
+            color: #000000;
+            text-decoration: none; 
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+
+        .btn:hover {
+            color: #ffffff;
+            background-color: #000000;
+        }
+
+        main {
+
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+
     </style>
 </head>
 <body>
-    <div class="conteiner_site">
+    <header>
         <h1>BuscarX</h1>
-        <a href="login.jsp">
-            <div class="login_button">
-                <button>login</button>
-            </div>
-        </a>
-        <script>
-        </script> 
-    </div>
+
+        <div class="usuarios">
+            <a href="login.jsp" class="btn login">
+                login
+            </a>
+
+            <a href="cadastro.jsp" class="btn cadastro">
+                cadastro
+            </a>
+
+        </div>
+    </header>
+
+    <main>
+
+        <h1>texto</h1>
+
+    </main>
+
+
+    <script>
+
+    </script> 
 </body>
 </html>
 
