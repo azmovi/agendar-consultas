@@ -62,27 +62,29 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>BuscarX</h1>
+    <fmt:bundle basename="messages">
+        <header>
+            <h1>BuscarX</h1>
 
-        <div class="usuarios">
-            <a href="login.jsp" class="btn login">
-                login
-            </a>
+            <div class="usuarios">
+                <a href="login.jsp" class="btn login">
+                    <fmt:message key="entrar"/>
+                </a>
 
-            <a href="cadastro.jsp" class="btn cadastro">
-                cadastro
-            </a>
+                <a href="cadastro.jsp" class="btn cadastro">
+                    <fmt:message key="cadastro"/>
+                </a>
 
-        </div>
-    </header>
+            </div>
+        </header>
 
-    <main>
+        <main>
 
-        <h1>texto</h1>
+            <h1>texto</h1>
 
-    </main>
+        </main>
 
+    </fmt:bundle>
 
     <script>
 
