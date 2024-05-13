@@ -67,6 +67,17 @@
             width: 88%;
         }
 
+        .sexo-label {
+            margin-bottom: 10px;
+        }
+
+        .sexo-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            text-align: center;
+        }
+
         input.confirmar {
             margin-left: 30%;
             margin-right: 30%;
@@ -102,7 +113,13 @@
 
         <form action="/api" method="post">
 
-            <h3>Login Cliente </h3>
+            <h3>Novo Cliente </h3>
+
+            <label for="Nome">
+                Nome:
+            </label> <br>
+
+            <input type="text" id="nome" name="nome" required><br>
 
             <label for="Email">
                 Email:
@@ -118,10 +135,32 @@
 
             <br>
             
+            <label for="CPF">
+                CPF:
+            </label> <br>
+            <!-- TODO: Melhorar o formato do cpf??-->
+            <input type="number" id="cpf" name="cpf" required>
+            <br>
+
+            <label for="sexo">Sexo:</label><br>
+            <select name="opcao" id="opcao">
+                <option> Masculino </option>
+                <option> Feminimo </option>
+                <option> Outro </option>
+            </select> <br>
+
+            <label for="Data">
+                Data de Nascimento:
+            </label> <br>
+
+            <input type="date" id="data" name="data" required><br>
+
             <input type="submit" value=" Confimar" class="confirmar">
 
         </form>
+
     </div>
+
 
     <script>
 
