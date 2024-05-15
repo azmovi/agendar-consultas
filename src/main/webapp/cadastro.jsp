@@ -20,60 +20,48 @@
         }
 
         .btn {
+            width: 45%;
             margin: 5%;
+            padding: 5%;
             border: 4px solid black;
             border-radius: 25px;
-            padding: 5%;
-            width: 45%;
             text-align: center;
             font-weight: bold;
             color: #000000;
             text-decoration: none; 
             transition: background-color 0.7s ease, color 0.4s ease;
         }
-
+        
         .btn:hover {
             color: #ffffff;
             background-color: #000000;
         }
 
-        .formulario {
+        .conteiner-central {
+            text-align: center;
             margin: 5%;
+            padding: 3%;
             border: 4px solid black;
             border-radius: 25px;
-            padding: 5%;
+            display: grid;
+            grid-auto-flow: row;
+            place-items: center;
         }
 
-        h3 {
-            margin-top: -5%;
+        .escolha {
+            display: grid;
+            grid-auto-flow: column;
+            width: 60%;
+            margin: 5%;
+            margin-bottom: 10%;
         }
 
-        label {
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 85%;
-            margin: 2%;
-            padding: 1%;
-            background-color: white;
-            border: 4px solid black;
-            border-radius: 10px;
-        }
-
-        .confirmar {
-            margin-left: 30%;
-            margin-right: 30%;
-            background-color: white;
-            font-weight: bold;
-            cursor: pointer;
-            width: 35%;
-            transition: border-color 0.3s ease, color 0.4s ease;
-        }
-
-        .confirmar:hover {
-            background-color: #28e673;
-            border-color: white;
+        .cliente, .profissional {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -88,62 +76,21 @@
             </a>
         </header>
 
-        <div class="formulario">
-            <form action="/api" method="post">
-                <h3>
-                    <fmt:message key="cliente" />
-                </h3>
-
-                <label for="nome">
-                    <fmt:message key="nome"/>
-                </label> <br>
-                <input type="text" id="nome" name="nome" required><br>
-
-                <label for="email">
-                    <fmt:message key="email"/>
-                </label> <br>
-                <input type="email" id="email" name="email" required><br>
-
-                <label for="senha">
-                    <fmt:message key="senha"/>
-                </label> <br>
-                <input type="password" id="senha" name="senha" required><br>
-
-                <label for="cpf">
-                    <fmt:message key="cpf"/>
-                </label> <br>
-                <input type="number" id="cpf" name="cpf" required><br>
-
-                <label for="sexo">
-                    <fmt:message key="sexo"/>
-                </label><br>
-
-                <select name="opcao" id="opcao">
-                    <option>
-                        <fmt:message key="masculino"/>
-                    </option>
-                    <option>
-                        <fmt:message key="feminino"/>
-                    </option>
-                    <option>
-                        <fmt:message key="outro"/>
-                    </option>
-                </select> <br>
-
-                <label for="data">
-                    <fmt:message key="nascimento"/>
-                </label> <br>
-                <input type="date" id="data" name="data" required><br>
-
-                <input
-                    type="submit"
-                    class="confirmar"
-                    value="<fmt:message key="confirmar"/>"
-                >
-
-            </form>
+        <div class="conteiner-central">
+            <div>
+                <h1>
+                    <fmt:message key="msg_cadastro"/>
+                </h1>
+            </div>
+            <div class="escolha">
+                <a href="cliente_cadastro.jsp" class="btn cliente">
+                    <fmt:message key="cliente"/>
+                </a>
+                <a href="profissional_cadastro.jsp" class="btn profissional">
+                    <fmt:message key="profissional"/>
+                </a>
+            </div>
         </div>
-
     </fmt:bundle>
 </body>
 </html>
