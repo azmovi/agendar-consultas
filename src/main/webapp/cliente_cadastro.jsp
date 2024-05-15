@@ -89,7 +89,7 @@
         </header>
 
         <div class="formulario">
-            <form action="/api" method="post">
+            <form action="teste" method="post">
                 <h3>
                     <fmt:message key="cliente" />
                 </h3>
@@ -118,7 +118,7 @@
                     <fmt:message key="sexo"/>
                 </label><br>
 
-                <select name="opcao" id="opcao">
+                <select name="sexo" id="opcao">
                     <option>
                         <fmt:message key="masculino"/>
                     </option>
@@ -130,10 +130,10 @@
                     </option>
                 </select> <br>
 
-                <label for="data">
+                <label for="data de nascimento">
                     <fmt:message key="nascimento"/>
                 </label> <br>
-                <input type="date" id="data" name="data" required><br>
+                <input type="date" id="nascimento" name="nascimento" required><br>
 
                 <input
                     type="submit"

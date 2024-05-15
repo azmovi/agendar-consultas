@@ -89,7 +89,7 @@
         </header>
 
         <div class="formulario">
-            <form action="/api" method="post">
+            <form action="/cadastrar/profissional" method="post">
                 <h3>
                     <fmt:message key="profissional" />
                 </h3>

@@ -1,6 +1,6 @@
 package br.ufscar.dc.dsw.domain;
 
-public class Profissional {
+public class Profissional extends Usuario {
     private long idProfissional;
     private String especilidade;
     private byte[] pdfData;

@@ -1,12 +1,16 @@
 package br.ufscar.dc.dsw.domain;
 
 import java.util.Date;
-import br.ufscar.dc.dsw.domain.Sexo;
 
-public class Cliente {
+public class Cliente extends Usuario {
     private long idCliente;
     private Sexo sexo;
     private Date dataNascimento;
+
+
+    public Cliente(long idCliente) {
+        this.idCliente = idCliente;
+    }
 
     public long getIdCliente() {
         return idCliente;
@@ -28,5 +32,6 @@ public class Cliente {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
 }
 

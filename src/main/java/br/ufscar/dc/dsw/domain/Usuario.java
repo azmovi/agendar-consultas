@@ -7,6 +7,26 @@ public class Usuario{
     private String senha;
     private String cpf;
 
+
+    public Usuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	
+	public Usuario(String nome, String email, String senha, String cpf) {
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+        this.cpf = cpf;
+	}
+	
+	public Usuario(Long idUsuario, String nome, String email, String senha, String cpf) {
+		this.idUsuario = idUsuario;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+		this.cpf = cpf;
+	}
+
     public long getIdUsuario() {
         return idUsuario;
     }
