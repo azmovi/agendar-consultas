@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.util.Sexo;
@@ -42,25 +43,28 @@ public class ClienteController extends HttpServlet {
         String sexoString = request.getParameter("sexo");
         Sexo sexo = conversor.ConverterStringSexo(sexoString);
 
+        HttpSession session = request.getSession();
+
         if (usuarioDAO.usuarioValido(email, cpf))
         {
             Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
             usuarioDAO.insertUsuario(cliente);
 
-            request.getSession().setAttribute("cliente", cliente);
+            session.setAttribute("cliente", cliente);
             response.sendRedirect("index.jsp");
         }
 
         else
         {
-            request.setAttribute("ErrorCriarNovoUsuario", "Este EMAIL ou CPF já está em uso.");
-            request.setAttribute("nome", nome);
-            request.setAttribute("email", email);
-            request.setAttribute("senha", senha);
-            request.setAttribute("cpf", cpf);
-            request.setAttribute("dataNascimentoString", dataNascimentoString);
-            request.setAttribute("sexoString", sexoString);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("cliente_cadastro.jsp");
+            session.setAttribute("ErrorCriarNovoUsuario", "Este EMAIL ou CPF já está em uso.");
+            session.setAttribute("nome", nome);
+            session.setAttribute("email", email);
+            session.setAttribute("senha", senha);
+            session.setAttribute("cpf", cpf);
+            session.setAttribute("dataNascimentoString", dataNascimentoString);
+            session.setAttribute("sexoString", sexoString);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/cliente/formulario.jsp");
             dispatcher.forward(request, response);
         }
     }
