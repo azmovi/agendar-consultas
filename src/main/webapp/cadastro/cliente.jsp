@@ -83,7 +83,7 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="../cadastro.jsp" class="btn voltar">
+            <a href="cadastro.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>

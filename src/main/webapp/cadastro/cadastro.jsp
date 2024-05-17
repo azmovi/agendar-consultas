@@ -25,10 +25,10 @@
                 </h1>
             </div>
             <div class="escolha">
-                <a href="cliente/formulario.jsp" class="btn cliente">
+                <a href="cliente.jsp" class="btn cliente">
                     <fmt:message key="cliente"/>
                 </a>
-                <a href="profissional/formulario.jsp" class="btn profissional">
+                <a href="profissional.jsp" class="btn profissional">
                     <fmt:message key="profissional"/>
                 </a>
             </div>

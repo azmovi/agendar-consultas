@@ -80,7 +80,6 @@
     </style>
 </head>
 <body>
-
     <c:if test="${not empty sessionScope.ErrorCriarNovoUsuario}">
         <script>
             alert('${sessionScope.ErrorCriarNovoUsuario}');
@@ -92,13 +91,13 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="../cadastro.jsp" class="btn voltar">
+            <a href="cadastro.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>
 
         <div class="formulario">
-            <form action="/cadastrar/profissional" method="post">
+            <form id="form" action="/AgendarConsultas/criar_profissional" method="post">
                 <h3>
                     <fmt:message key="profissional" />
                 </h3>
@@ -163,10 +162,9 @@
                 </label> <br>
                 <input
                     type="file"
-                    accpet=".pdf"
+                    accpet="application/pdf"
                     id="pdfData"
                     name="pdfData"
-                    value="${sessionScope.pdfString != null ? sessionScope.pdfString: ''}"
                     required
                 ><br>
 
@@ -175,7 +173,6 @@
                     class="confirmar"
                     value="<fmt:message key="confirmar"/>"
                 >
-
             </form>
         </div>
 

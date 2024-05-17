@@ -14,7 +14,7 @@ import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
-@WebServlet(urlPatterns = {"/criar_cliente"})
+@WebServlet(urlPatterns = {"/criar_profissional"})
 
 public class ProfissionalController extends HttpServlet {
 
@@ -60,15 +60,9 @@ public class ProfissionalController extends HttpServlet {
             session.setAttribute("senha", senha);
             session.setAttribute("cpf", cpf);
             session.setAttribute("especialidade", especialidade);
-            session.setAttribute("pdfString", pdfString);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/profissional.jsp");
             dispatcher.forward(request, response);
         }
-    }
-
-    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AgendarConsultas");
-        dispatcher.forward(request, response);
     }
 }
