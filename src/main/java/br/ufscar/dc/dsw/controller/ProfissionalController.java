@@ -1,7 +1,6 @@
 package br.ufscar.dc.dsw.controller;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,14 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import br.ufscar.dc.dsw.domain.Cliente;
-import br.ufscar.dc.dsw.util.Sexo;
+import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
 @WebServlet(urlPatterns = {"/criar_cliente"})
 
-public class ClienteController extends HttpServlet {
+public class ProfissionalController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,22 +33,22 @@ public class ClienteController extends HttpServlet {
         String senha = request.getParameter("senha");
         String cpf = request.getParameter("cpf");
 
+        String especialidade = request.getParameter("especialidade");
+
         Conversor conversor = new Conversor();
 
-        String dataNascimentoString = request.getParameter("nascimento");
-        Date dataNascimento = conversor.StringParaData(dataNascimentoString);
+        String pdfString = request.getParameter("pdfData");
+        byte[] pdfData = conversor.StringParaPdf(pdfString);
 
-        String sexoString = request.getParameter("sexo");
-        Sexo sexo = conversor.StringParaSexo(sexoString);
 
         HttpSession session = request.getSession();
 
         if (usuarioDAO.usuarioValido(email, cpf))
         {
-            Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
-            usuarioDAO.insertUsuario(cliente);
+            Profissional profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
+            usuarioDAO.insertUsuario(profissional);
 
-            session.setAttribute("cliente", cliente);
+            session.setAttribute("profissional", profissional);
             response.sendRedirect("index.jsp");
         }
 
@@ -61,10 +59,10 @@ public class ClienteController extends HttpServlet {
             session.setAttribute("email", email);
             session.setAttribute("senha", senha);
             session.setAttribute("cpf", cpf);
-            session.setAttribute("dataNascimentoString", dataNascimentoString);
-            session.setAttribute("sexoString", sexoString);
+            session.setAttribute("especialidade", especialidade);
+            session.setAttribute("pdfString", pdfString);
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/cliente.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/profissional.jsp");
             dispatcher.forward(request, response);
         }
     }

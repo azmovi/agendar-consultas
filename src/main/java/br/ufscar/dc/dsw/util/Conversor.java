@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.util;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 
 public class Conversor {
 
-    public Date ConverterStringData(String dataString) {
+    public Date StringParaData(String dataString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date dataFormatada = null;
         try
@@ -22,7 +23,7 @@ public class Conversor {
         return dataFormatada;
     }
 
-    public Sexo ConverterStringSexo(String sexoString) {
+    public Sexo StringParaSexo(String sexoString) {
         if (sexoString.equals("man") || sexoString.equals("masculino"))
         {
             return Sexo.MASCULINO;
@@ -35,5 +36,11 @@ public class Conversor {
         {
             return Sexo.OUTRO;
         }
+    }
+    public byte[] StringParaPdf(String pdfString)
+    {
+        byte[] pdfData = pdfString.getBytes(StandardCharsets.UTF_8);
+
+        return pdfData;
     }
 }
