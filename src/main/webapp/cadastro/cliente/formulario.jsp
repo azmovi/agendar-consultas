@@ -5,71 +5,7 @@
 <html>
 <head>
     <title>BuscarX</title>
-    <script 
-        src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
-    </script>
-    <style>
-        body {
-            margin: 5%;
-            border: 4px solid black;
-            border-radius: 25px;
-            padding: 5%;
-        }
-        header {
-            display: grid;
-            grid-auto-flow: column;
-            place-items: center;
-        }
-        .btn {
-            margin: 5%;
-            border: 4px solid black;
-            border-radius: 25px;
-            padding: 5%;
-            width: 45%;
-            text-align: center;
-            font-weight: bold;
-            color: #000000;
-            text-decoration: none; 
-            transition: background-color 0.7s ease, color 0.4s ease;
-        }
-        .btn:hover {
-            color: #ffffff;
-            background-color: #000000;
-        }
-        .formulario {
-            margin: 5%;
-            border: 4px solid black;
-            border-radius: 25px;
-            padding: 5%;
-        }
-        h3 {
-            margin-top: -5%;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, select {
-            width: 85%;
-            margin: 2%;
-            padding: 1%;
-            background-color: white;
-            border: 4px solid black;
-            border-radius: 10px;
-        }
-        .confirmar {
-            margin-left: 30%;
-            margin-right: 30%;
-            background-color: white;
-            font-weight: bold;
-            cursor: pointer;
-            width: 35%;
-            transition: border-color 0.3s ease, color 0.4s ease;
-        }
-        .confirmar:hover {
-            background-color: #28e673;
-            border-color: white;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 <% 
@@ -83,7 +19,11 @@
 
     if (errorMessage != null) { 
 %>
-    <p style="color:red;"><%= errorMessage %></p>
+
+    <script>
+        alert('<%= errorMessage %>');
+    </script>
+
 <% } %>
 
     <fmt:bundle basename="messages">
@@ -91,13 +31,13 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="cadastro.jsp" class="btn voltar">
+            <a href="../cadastro.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>
 
         <div class="formulario">
-            <form id="form" action="test" method="post">
+            <form id="form" action="criar_cliente" method="post">
                 <h3>
                     <fmt:message key="cliente" />
                 </h3>

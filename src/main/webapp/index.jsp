@@ -1,6 +1,9 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<%@ page import="br.ufscar.dc.dsw.domain.Cliente" %>
+<%@ page import="br.ufscar.dc.dsw.domain.Profissional" %>
+
 <!DOCTYPE html>
 
 <html>
@@ -21,7 +24,7 @@
             place-items: center;
         }
 
-        .usuarios {
+        .usuario {
 
             margin: 9%;
             border: 4px solid black;
@@ -62,32 +65,40 @@
     </style>
 </head>
 <body>
+<% 
+    Cliente cliente = (Cliente) session.getAttribute("cliente");
+    Profissional profissional = (Profissional) session.getAttribute("profissional");
+%>
     <fmt:bundle basename="messages">
         <header>
             <h1>BuscarX</h1>
 
-            <div class="usuarios">
-                <a href="login.jsp" class="btn login">
-                    <fmt:message key="entrar"/>
-                </a>
+            <div class="usuario">
+                <% if (cliente != null) { %>
+                    <a href="cliente.jsp" class="btn cliente">
+                        <fmt:message key="BoasVindas"/> <%= cliente.getNome() %>
+                    </a>
+                <% } else if (profissional != null) { %>
+                    <a href="profissional.jsp" class="btn profissional">
+                        Bem-vindo <%= profissional.getNome() %>
+                    </a>
+                <% } else { %>
+                    <a href="login.jsp" class="btn login">
+                        <fmt:message key="entrar"/>
+                    </a>
 
-                <a href="cadastro.jsp" class="btn cadastro">
-                    <fmt:message key="cadastro"/>
-                </a>
+                    <a href="cadastro/cadastro.jsp" class="btn cadastro">
+                        <fmt:message key="cadastro"/>
+                    </a>
+                <% } %>
 
             </div>
         </header>
-
         <main>
-
             <h1>texto</h1>
-
         </main>
-
     </fmt:bundle>
-
     <script>
-
     </script> 
 </body>
 </html>

@@ -1,7 +1,6 @@
 package br.ufscar.dc.dsw.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +15,7 @@ import br.ufscar.dc.dsw.util.Sexo;
 import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
-@WebServlet(urlPatterns = {"/test"})
+@WebServlet(urlPatterns = {"/criar_cliente"})
 
 public class ClienteController extends HttpServlet {
 
@@ -48,19 +47,20 @@ public class ClienteController extends HttpServlet {
             Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
             usuarioDAO.insertUsuario(cliente);
 
-            request.setAttribute("UsuarioCriado", "Usuario foi criado com sucesso.");
-            response.sendRedirect("/AgendarConsultas");
+            request.getSession().setAttribute("cliente", cliente);
+            response.sendRedirect("index.jsp");
         }
+
         else
         {
-            request.setAttribute("ErrorCriarNovoUsuario", "Este email ou cpf já está em uso.");
+            request.setAttribute("ErrorCriarNovoUsuario", "Este EMAIL ou CPF já está em uso.");
             request.setAttribute("nome", nome);
             request.setAttribute("email", email);
             request.setAttribute("senha", senha);
             request.setAttribute("cpf", cpf);
             request.setAttribute("dataNascimentoString", dataNascimentoString);
             request.setAttribute("sexoString", sexoString);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/cliente_cadastro.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("cliente_cadastro.jsp");
             dispatcher.forward(request, response);
         }
     }
