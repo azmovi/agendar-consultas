@@ -5,6 +5,9 @@
 <html>
 <head>
     <title>BuscarX</title>
+    <script 
+        src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+    </script>
     <style>
         body {
             margin: 5%;
@@ -12,13 +15,11 @@
             border-radius: 25px;
             padding: 5%;
         }
-
         header {
             display: grid;
             grid-auto-flow: column;
             place-items: center;
         }
-
         .btn {
             margin: 5%;
             border: 4px solid black;
@@ -31,27 +32,22 @@
             text-decoration: none; 
             transition: background-color 0.7s ease, color 0.4s ease;
         }
-
         .btn:hover {
             color: #ffffff;
             background-color: #000000;
         }
-
         .formulario {
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
             padding: 5%;
         }
-
         h3 {
             margin-top: -5%;
         }
-
         label {
             font-weight: bold;
         }
-
         input, select {
             width: 85%;
             margin: 2%;
@@ -60,7 +56,6 @@
             border: 4px solid black;
             border-radius: 10px;
         }
-
         .confirmar {
             margin-left: 30%;
             margin-right: 30%;
@@ -70,7 +65,6 @@
             width: 35%;
             transition: border-color 0.3s ease, color 0.4s ease;
         }
-
         .confirmar:hover {
             background-color: #28e673;
             border-color: white;
@@ -78,6 +72,20 @@
     </style>
 </head>
 <body>
+<% 
+    String errorMessage = (String) request.getAttribute("ErrorCriarNovoUsuario");
+    String nome = (String) request.getAttribute("nome");
+    String email = (String) request.getAttribute("email");
+    String senha = (String) request.getAttribute("senha");
+    String cpf = (String) request.getAttribute("cpf");
+    String dataNascimentoString = (String) request.getAttribute("dataNascimentoString");
+    String sexoString = (String) request.getAttribute("sexoString");
+
+    if (errorMessage != null) { 
+%>
+    <p style="color:red;"><%= errorMessage %></p>
+<% } %>
+
     <fmt:bundle basename="messages">
         <header>
             <div class="titulo">
@@ -89,7 +97,7 @@
         </header>
 
         <div class="formulario">
-            <form action="teste" method="post">
+            <form id="form" action="test" method="post">
                 <h3>
                     <fmt:message key="cliente" />
                 </h3>
@@ -97,22 +105,46 @@
                 <label for="nome">
                     <fmt:message key="nome"/>
                 </label> <br>
-                <input type="text" id="nome" name="nome" required><br>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="<%= nome != null ? nome : "" %>"
+                    required
+                ><br>
 
                 <label for="email">
                     <fmt:message key="email"/>
                 </label> <br>
-                <input type="email" id="email" name="email" required><br>
+                <input 
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="<%= email != null ? email: "" %>"
+                    required
+                ><br>
 
                 <label for="senha">
                     <fmt:message key="senha"/>
                 </label> <br>
-                <input type="password" id="senha" name="senha" required><br>
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    value="<%= senha != null ? senha: "" %>"
+                    required
+                ><br>
 
                 <label for="cpf">
                     <fmt:message key="cpf"/>
                 </label> <br>
-                <input type="number" id="cpf" name="cpf" required><br>
+                <input
+                    type="number"
+                    id="cpf"
+                    name="cpf"
+                    value="<%= cpf != null ? cpf : "" %>"
+                    required
+                ><br>
 
                 <label for="sexo">
                     <fmt:message key="sexo"/>
@@ -133,17 +165,21 @@
                 <label for="data de nascimento">
                     <fmt:message key="nascimento"/>
                 </label> <br>
-                <input type="date" id="nascimento" name="nascimento" required><br>
+                <input 
+                    type="date"
+                    id="nascimento"
+                    name="nascimento"
+                    required
+                    value="<%= dataNascimentoString != null ? dataNascimentoString : "" %>"
+                ><br>
 
                 <input
                     type="submit"
                     class="confirmar"
                     value="<fmt:message key="confirmar"/>"
                 >
-
             </form>
         </div>
-
     </fmt:bundle>
 </body>
 </html>

@@ -4,39 +4,39 @@ create database sistema_de_agendamentos;
 
 use sistema_de_agendamentos;
 
-create table usuario(
-    id_profissinal bigint not null auto_increment PRIMARY KEY,
+create table Usuario(
+    id_usuario bigint not null auto_increment PRIMARY KEY,
     nome varchar(50) not null,
     email varchar(50) not null,
     senha varchar(50) not null,
-    cpf varchar(11) not null,
-)
+    cpf varchar(11) not null
+);
 
-create table profissionais(
-    id_profissinal bigint not null auto_increment PRIMARY KEY,
+create table Profissional(
+    id_profissional bigint not null auto_increment PRIMARY KEY,
     id_usuario bigint not null,
     especialidade varchar(50) not null,
-    pdf longblob not null,
-    FOREIGN KEY(id_usuario) REFERENCES usuarios(id_usuario)
-)
+    pdf_data longblob not null,
+    FOREIGN KEY(id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
-create table clientes(
+create table Cliente(
     id_cliente bigint not null auto_increment PRIMARY KEY,
     id_usuario bigint not null,
     sexo enum('MASCULINO', 'FEMINIMO', 'OUTRO') not null,
     data_nascimento date not null,
-    FOREIGN KEY(id_usuario) REFERENCES usuarios(id_usuario)
-)
+    FOREIGN KEY(id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
-create table agendamento (
+create table Agendamento (
     id_agendamento bigint not null PRIMARY KEY,
-    id_cliente varchar(50),
-    id_profissinal varchar(50),
+    id_cliente bigint,
+    id_profissional bigint,
     data_agendamento date not null,
     hora_agendamento time not null,
-
-    FOREIGN KEY(id_cliente) REFERENCES clientes(id_cliente)
-    FOREIGN KEY(id_profissinal) REFERENCES profissionais(id_profissinal)
+    FOREIGN KEY(id_cliente) REFERENCES Cliente(id_cliente),
+    FOREIGN KEY(id_profissional) REFERENCES Profissional(id_profissional)
 );
 
 quit
+

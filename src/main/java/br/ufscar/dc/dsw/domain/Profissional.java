@@ -2,9 +2,14 @@ package br.ufscar.dc.dsw.domain;
 
 public class Profissional extends Usuario {
     private long idProfissional;
-    private String especilidade;
+    private String especialidade;
     private byte[] pdfData;
 
+    public Profissional(String nome, String email, String senha, String cpf, String especialidade, byte[] pdfData) {
+        super(nome, email, senha, cpf);
+        this.especialidade = especialidade;
+        this.pdfData = pdfData;
+    }
     public long getIdProfissional() {
         return idProfissional;
     }
@@ -13,10 +18,10 @@ public class Profissional extends Usuario {
     }
 
     public String getEspecialidade() {
-        return especilidade;
+        return especialidade;
     }
-    public void setEspecialidade(String especilidade) {
-        this.especilidade = especilidade;
+    public void setEspecialidade(String especialidade) {
+        this.especialidade= especialidade;
     }
 
     public byte[] getPdfData() {

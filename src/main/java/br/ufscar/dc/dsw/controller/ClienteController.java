@@ -2,9 +2,6 @@ package br.ufscar.dc.dsw.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ClientInfoStatus;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -15,67 +12,61 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.ufscar.dc.dsw.domain.Cliente;
-import br.ufscar.dc.dsw.domain.Sexo;
+import br.ufscar.dc.dsw.util.Sexo;
+import br.ufscar.dc.dsw.util.Conversor;
+import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
-@WebServlet(urlPatterns = {"/teste"})
+@WebServlet(urlPatterns = {"/test"})
 
 public class ClienteController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    private UsuarioDAO usuarioDAO;
+
+    @Override
+    public void init() {
+        usuarioDAO = new UsuarioDAO();
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
         String cpf = request.getParameter("cpf");
-        String sexoString = request.getParameter("sexo");
+
+        Conversor conversor = new Conversor();
 
         String dataNascimentoString = request.getParameter("nascimento");
-        Date dataNascimento = ConverterStringData(dataNascimentoString);
-        Sexo sexo = ConverterStringSexo(sexoString);
+        Date dataNascimento = conversor.ConverterStringData(dataNascimentoString);
 
-        System.out.println(dataNascimento);
+        String sexoString = request.getParameter("sexo");
+        Sexo sexo = conversor.ConverterStringSexo(sexoString);
 
-        out.print(nome);
-        out.print(email);
-        out.print(senha);
-        out.print(cpf);
-        out.print(sexo);
-        out.print(dataNascimento);
-        Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
+        if (usuarioDAO.usuarioValido(email, cpf))
+        {
+            Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
+            usuarioDAO.insertUsuario(cliente);
+
+            request.setAttribute("UsuarioCriado", "Usuario foi criado com sucesso.");
+            response.sendRedirect("/AgendarConsultas");
+        }
+        else
+        {
+            request.setAttribute("ErrorCriarNovoUsuario", "Este email ou cpf já está em uso.");
+            request.setAttribute("nome", nome);
+            request.setAttribute("email", email);
+            request.setAttribute("senha", senha);
+            request.setAttribute("cpf", cpf);
+            request.setAttribute("dataNascimentoString", dataNascimentoString);
+            request.setAttribute("sexoString", sexoString);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/cliente_cadastro.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
-    public Date ConverterStringData(String dataString)
-    {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date dataFormatada = null;
-        try
-        {
-            dataFormatada = format.parse(dataString);
-        }
-        catch (ParseException e)
-        {
-
-            e.printStackTrace();
-        }
-        return dataFormatada;
-    }
-    public Sexo ConverterStringSexo(String sexoString) {
-        if (sexoString.equals("man") || sexoString.equals("masculino"))
-        {
-            return Sexo.MASCULINO;
-        }
-        else 
-        {
-            if (sexoString.equals("woman") || sexoString.equals("mulher"))
-            {
-                return Sexo.FEMININO;
-            } 
-            else 
-            {
-                return Sexo.OUTRO; //other || outro 
-            }
-        }
+    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AgendarConsultas");
+        dispatcher.forward(request, response);
     }
 }
