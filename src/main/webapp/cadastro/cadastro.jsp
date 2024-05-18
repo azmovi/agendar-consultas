@@ -5,7 +5,65 @@
 <html>
 <head>
     <title>BuscarX</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+
+        header {
+            display: grid;
+            grid-auto-flow: column;
+            place-items: center;
+        }
+
+        .btn {
+            width: 45%;
+            margin: 5%;
+            padding: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            text-decoration: none; 
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+
+        .btn:hover {
+            color: #ffffff;
+            background-color: #000000;
+        }
+
+        .conteiner-central {
+            text-align: center;
+            margin: 5%;
+            padding: 3%;
+            border: 4px solid black;
+            border-radius: 25px;
+            display: grid;
+            grid-auto-flow: row;
+            place-items: center;
+        }
+
+        .escolha {
+            display: grid;
+            grid-auto-flow: column;
+            width: 60%;
+            margin: 5%;
+            margin-bottom: 10%;
+        }
+
+        .cliente, .profissional {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <fmt:bundle basename="messages">

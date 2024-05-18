@@ -27,6 +27,10 @@ public class Usuario{
 		this.cpf = cpf;
 	}
 
+	public Usuario(String nome) {
+		this.nome = nome;
+	}
+
     public long getIdUsuario() {
         return idUsuario;
     }

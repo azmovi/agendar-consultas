@@ -7,11 +7,62 @@
 <html>
 <head>
     <title>BuscarX</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+
+        header{
+            display: grid;
+            grid-auto-flow : column;
+            place-items: center;
+        }
+
+        .usuario {
+            margin: 9%;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 5%;
+
+            justify-items: center;
+
+            display: grid;
+            grid-auto-flow: column;
+        }
+
+        .btn {
+            margin: 5px;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 1em;
+
+            font-weight: bold;
+            color: #000000;
+            text-decoration: none; 
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+
+        .btn:hover {
+            color: #ffffff;
+            background-color: #000000;
+        }
+
+        main {
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+    </style>
 </head>
 <body>
     <c:set var="cliente" value="${sessionScope.cliente}" />
     <c:set var="profissional" value="${sessionScope.profissional}" />
+    <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
+    <c:set var="teste" value="${sessionScope.teste}" />
 
     <fmt:bundle basename="messages">
     <header>
@@ -41,9 +92,29 @@
         </div>
     </header>
     <main>
-        <h1>Texto</h1>
+        <h1 align="center"> Lista de Profissionais </h1>
+        <table border="1">
+            <tr>
+                <th>Nome</th>
+                <th>Especialidade</th>
+            </tr>
+            <c:forEach var="profissional" items="${listaProfissionais}">
+                <tr>
+                    <td>${profissional.nome}</td>
+                    <td>${profissional.especialidade}</td>
+                </tr>
+            </c:forEach>
+        </table>
     </main>
     </fmt:bundle>
+
+    <script>
+        window.onload = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "get_profissionais", false);
+            xhr.send();
+        };
+    </script>
 </body>
 </html>
 

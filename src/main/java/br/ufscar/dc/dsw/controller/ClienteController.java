@@ -17,7 +17,6 @@ import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
 @WebServlet(urlPatterns = {"/criar_cliente"})
-
 public class ClienteController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +28,7 @@ public class ClienteController extends HttpServlet {
         usuarioDAO = new UsuarioDAO();
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
