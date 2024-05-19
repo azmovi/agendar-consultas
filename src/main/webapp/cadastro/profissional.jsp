@@ -9,6 +9,7 @@
     <title>BuscarX</title>
     <style>
         body {
+            font-family: "Comic Sans MS";
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
@@ -91,7 +92,7 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="cadastro.jsp" class="btn voltar">
+            <a href="/AgendarConsultas/cadastro/cadastro.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>

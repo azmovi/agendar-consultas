@@ -7,6 +7,7 @@
     <title>BuscarX</title>
     <style>
         body {
+            font-family: "Comic Sans MS";
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
@@ -71,7 +72,7 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="../index.jsp" class="btn voltar">
+            <a href="/AgendarConsultas/index.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>
@@ -83,10 +84,10 @@
                 </h1>
             </div>
             <div class="escolha">
-                <a href="cliente.jsp" class="btn cliente">
+                <a href="/AgendarConsultas/cadastro/cliente.jsp" class="btn cliente">
                     <fmt:message key="cliente"/>
                 </a>
-                <a href="profissional.jsp" class="btn profissional">
+                <a href="/AgendarConsultas/cadastro/profissional.jsp" class="btn profissional">
                     <fmt:message key="profissional"/>
                 </a>
             </div>

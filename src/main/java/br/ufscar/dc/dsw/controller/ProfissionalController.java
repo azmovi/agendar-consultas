@@ -77,7 +77,6 @@ public class ProfissionalController extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.setAttribute("listaProfissionais", listaProfissionais);
-        session.setAttribute("teste", "teste");
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
         dispatcher.forward(request, response);
     }

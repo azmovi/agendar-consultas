@@ -44,6 +44,7 @@ public class ClienteController extends HttpServlet {
         Sexo sexo = conversor.StringParaSexo(sexoString);
 
         HttpSession session = request.getSession();
+        session.removeAttribute("ErrorCriarNovoUsuario");
 
         if (usuarioDAO.usuarioValido(email, cpf))
         {

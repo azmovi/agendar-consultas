@@ -10,6 +10,8 @@ import java.sql.Statement;
 import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.domain.Usuario;
+import br.ufscar.dc.dsw.util.Conversor;
+import br.ufscar.dc.dsw.util.Sexo;
 
 public class UsuarioDAO extends GenericDAO {
     public void insertUsuario(Usuario usuario) {
@@ -93,39 +95,6 @@ public class UsuarioDAO extends GenericDAO {
         }
     }
 
-    public Usuario getUsuario(String email) {
-        String sql = "SELECT * FROM Usuario WHERE email = ?";
-        Usuario usuario = null;
-
-        try
-        {
-            Connection  conn = this.getConnection();
-            PreparedStatement statement = conn.prepareStatement(sql);
-
-            statement.setString(1, email);
-
-            try (ResultSet resultSet = statement.executeQuery())
-            {
-                if (resultSet.next()) {
-                    long id = resultSet.getLong("id_usuario");
-                    String nome = resultSet.getString("nome");
-                    String senha = resultSet.getString("senha");
-                    String cpf = resultSet.getString("cpf");
-
-                    usuario = new Usuario(id, nome, email, senha, cpf);
-                }
-            }
-            statement.close();
-            conn.close();
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        return usuario;
-    }
-
     public boolean usuarioValido(String email, String cpf) {
         String sql = "SELECT 1 FROM Usuario WHERE email = ? OR cpf = ?";
         boolean validUser = true;
@@ -148,5 +117,123 @@ public class UsuarioDAO extends GenericDAO {
         }
 
         return validUser;
+    }
+
+    public Usuario getUsuario(String email, String senha) {
+        String sql = "SELECT * FROM Usuario WHERE email = ? AND senha = ?";
+        Usuario usuario = null;
+
+        try
+        {
+            Connection  conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+
+            statement.setString(1, email);
+            statement.setString(2, senha);
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next()) {
+                    long id = resultSet.getLong("id_usuario");
+                    String nome = resultSet.getString("nome");
+                    String cpf = resultSet.getString("cpf");
+
+                    if (eUmCliente(conn, id))
+                    {
+                        usuario = getCliente(conn, id, nome, email, senha, cpf);
+                    }
+                    else
+                    {
+                        usuario = getProfissional(conn, id, nome, email, senha, cpf);
+                    }
+                }
+            }
+            statement.close();
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return usuario;
+    }
+    public boolean eUmCliente(Connection conn, long id)
+    {
+        boolean encontrando = false;
+        String sql = "SELECT * FROM Cliente WHERE Cliente.id_usuario = ?";
+        try
+        {
+
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setLong(1, id);
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    encontrando = true;
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return encontrando;
+    }
+
+    public Cliente getCliente(Connection conn, Long id, String nome, String email, String senha, String cpf)
+    {
+        Cliente cliente = null;
+        String sql = "SELECT * FROM Cliente WHERE id_usuario = ?";
+        try
+        {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setLong(1, id);
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    String sexoString = resultSet.getString("sexo");
+                    Conversor conversor = new Conversor();
+                    Sexo sexo = conversor.StringParaSexo(sexoString);
+
+                    Date dataNascimento = resultSet.getDate("data_nascimento");
+
+                    cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return cliente;
+    }
+
+    public Profissional getProfissional(Connection conn, Long id, String nome, String email, String senha, String cpf)
+    {
+        Profissional profissional = null;
+        String sql = "SELECT * FROM Profissional WHERE id_usuario = ?";
+        try
+        {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setLong(1, id);
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    String especialidade = resultSet.getString("especialidade");
+                    byte[] pdfData = resultSet.getBytes("pdf_data");
+
+                    profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return profissional;
     }
 }

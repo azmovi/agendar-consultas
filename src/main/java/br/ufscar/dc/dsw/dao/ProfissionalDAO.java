@@ -15,7 +15,7 @@ public class ProfissionalDAO extends GenericDAO {
 
         List<Profissional> listaProfissionais = new ArrayList<>();
 
-        String sql = "SELECT Profissional.especialidade, Usuario.nome FROM Profissional JOIN Usuario ON Usuario.id_usuario = Profissional.id_profissional";
+        String sql = "SELECT Profissional.especialidade, Usuario.nome FROM Profissional JOIN Usuario ON Usuario.id_usuario = Profissional.id_usuario";
 
         try
         {

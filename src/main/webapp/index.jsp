@@ -9,6 +9,7 @@
     <title>BuscarX</title>
     <style>
         body {
+            font-family: "Comic Sans MS";
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
@@ -19,6 +20,10 @@
             display: grid;
             grid-auto-flow : column;
             place-items: center;
+        }
+        .titulo {
+            font-size: 50px;
+            font-weight: bold;
         }
 
         .usuario {
@@ -40,6 +45,7 @@
             padding: 1em;
 
             font-weight: bold;
+            font-size: 20px;
             color: #000000;
             text-decoration: none; 
             transition: background-color 0.7s ease, color 0.4s ease;
@@ -56,35 +62,75 @@
             border-radius: 25px;
             padding: 5%;
         }
+        body {
+            font-family: "Comic Sans MS";
+        }
+
+        .tabela{
+            padding: 0% 0;
+            margin: 5px;
+            padding-top: 0%;
+            text-align: center;
+            border: solid;
+            border-radius: 15px;
+
+        }
+        .botao{
+            width: 100%;
+            padding: 3%;
+            border: none;
+            font-weight: bold;
+            color: black;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+        .botao:hover{
+            background-color: black;
+            color: white;
+        }
+
+        .nome{
+            font-size: 25px;
+        }
+
+        .especialidade {
+            font-size: 20px;
+        }
+
+        hr {
+            margin: 0%;
+            border: 1px solid black;
+        }
+
     </style>
 </head>
 <body>
     <c:set var="cliente" value="${sessionScope.cliente}" />
     <c:set var="profissional" value="${sessionScope.profissional}" />
     <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
-    <c:set var="teste" value="${sessionScope.teste}" />
 
     <fmt:bundle basename="messages">
     <header>
-        <h1>BuscarX</h1>
+        <div class="titulo">BuscarX</div>
 
         <div class="usuario">
             <c:choose>
                 <c:when test="${cliente != null}">
-                    <a href="perfil/cliente.jsp" class="btn cliente">
+                    <a href="/AgendarConsultas/perfil/cliente.jsp" class="btn cliente">
                         <fmt:message key="BoasVindas" /> ${cliente.nome}
                     </a>
                 </c:when>
                 <c:when test="${profissional != null}">
-                    <a href="perfil/profissional.jsp" class="btn profissional">
+                    <a href="/AgendarConsultas/perfil/profissional.jsp" class="btn profissional">
                         <fmt:message key="BoasVindas" /> ${profissional.nome}
                     </a>
                 </c:when>
                 <c:otherwise>
-                    <a href="login/login.jsp" class="btn login">
+                    <a href="/AgendarConsultas/login/login.jsp" class="btn login">
                         <fmt:message key="entrar"/>
                     </a>
-                    <a href="cadastro/cadastro.jsp" class="btn cadastro">
+                    <a href="/AgendarConsultas/cadastro/cadastro.jsp" class="btn cadastro">
                         <fmt:message key="cadastro"/>
                     </a>
                 </c:otherwise>
@@ -93,27 +139,27 @@
     </header>
     <main>
         <h1 align="center"> Lista de Profissionais </h1>
-        <table border="1">
-            <tr>
-                <th>Nome</th>
-                <th>Especialidade</th>
-            </tr>
-            <c:forEach var="profissional" items="${listaProfissionais}">
-                <tr>
-                    <td>${profissional.nome}</td>
-                    <td>${profissional.especialidade}</td>
-                </tr>
-            </c:forEach>
+            <div class="tabela">
+                <c:forEach var="profissional" items="${listaProfissionais}">
+                    <button class="botao">
+                        <div class="nome">
+                            ${profissional.nome}
+                        </div>
+                        <div class="especialidade">
+                            ${profissional.especialidade}
+                        </div>
+                    </button>
+                    <hr>
+                </c:forEach>
+            </div>
         </table>
     </main>
     </fmt:bundle>
 
     <script>
         window.onload = function() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "get_profissionais", false);
-            xhr.send();
-        };
+            fetch("get_profissionais")
+        }
     </script>
 </body>
 </html>

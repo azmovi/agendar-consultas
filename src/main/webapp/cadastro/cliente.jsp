@@ -7,9 +7,9 @@
 <html>
 <head>
     <title>BuscarX</title>
-    <link href="styles.css" rel="stylesheet">
     <style>
         body {
+            font-family: "Comic Sans MS";
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
@@ -74,7 +74,7 @@
 <body>
     <c:if test="${not empty sessionScope.ErrorCriarNovoUsuario}">
         <script>
-            alert('${sessionScope.ErrorCriarNovoUsuario}');
+            alert("${sessionScope.ErrorCriarNovoUsuario}");
         </script>
     </c:if>
 
@@ -83,7 +83,7 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="cadastro.jsp" class="btn voltar">
+            <a href="/AgendarConsultas/cadastro/cadastro.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>
