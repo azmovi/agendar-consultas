@@ -14,6 +14,13 @@ public class Cliente extends Usuario {
         this.dataNascimento = dataNascimento;
 
     }
+
+    public Cliente(Long idUsusario, String nome, String email, String senha, String cpf, Sexo sexo, Date dataNascimento) {
+        super(idUsusario, nome, email, senha, cpf);
+        this.sexo = sexo;
+        this.dataNascimento = dataNascimento;
+
+    }
     public long getIdCliente() {
         return idCliente;
     }

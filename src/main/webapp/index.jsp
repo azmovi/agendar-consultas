@@ -62,9 +62,6 @@
             border-radius: 25px;
             padding: 5%;
         }
-        body {
-            font-family: "Comic Sans MS";
-        }
 
         .tabela{
             padding: 0% 0;
@@ -117,12 +114,12 @@
         <div class="usuario">
             <c:choose>
                 <c:when test="${cliente != null}">
-                    <a href="/AgendarConsultas/perfil/cliente.jsp" class="btn cliente">
+                    <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn cliente">
                         <fmt:message key="BoasVindas" /> ${cliente.nome}
                     </a>
                 </c:when>
                 <c:when test="${profissional != null}">
-                    <a href="/AgendarConsultas/perfil/profissional.jsp" class="btn profissional">
+                    <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn profissional">
                         <fmt:message key="BoasVindas" /> ${profissional.nome}
                     </a>
                 </c:when>
@@ -152,10 +149,8 @@
                     <hr>
                 </c:forEach>
             </div>
-        </table>
     </main>
     </fmt:bundle>
-
     <script>
         window.onload = function() {
             fetch("get_profissionais")

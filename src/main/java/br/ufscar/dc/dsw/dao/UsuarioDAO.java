@@ -14,6 +14,7 @@ import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.util.Sexo;
 
 public class UsuarioDAO extends GenericDAO {
+
     public void insertUsuario(Usuario usuario) {
 
         String sqlUsuario = "INSERT INTO Usuario(nome, email, senha, cpf) VALUES (?, ?, ?, ?)";
@@ -95,9 +96,9 @@ public class UsuarioDAO extends GenericDAO {
         }
     }
 
-    public boolean usuarioValido(String email, String cpf) {
-        String sql = "SELECT 1 FROM Usuario WHERE email = ? OR cpf = ?";
-        boolean validUser = true;
+    public long getIdUsuario (String email, String cpf) {
+        String sql = "SELECT id_usuario FROM Usuario WHERE email = ? OR cpf = ?";
+        long idUser = 0;
 
         try
         {
@@ -109,14 +110,14 @@ public class UsuarioDAO extends GenericDAO {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    validUser = false;
+                    idUser = resultSet.getLong("id_usuario");
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return validUser;
+        return idUser;
     }
 
     public Usuario getUsuario(String email, String senha) {
@@ -235,5 +236,60 @@ public class UsuarioDAO extends GenericDAO {
             throw new RuntimeException(e);
         }
         return profissional;
+    }
+
+    public void updateUsuario(Usuario usuario) {
+
+        String sqlUsuario= "UPDATE Usuario SET nome = ?, email = ?, senha = ?, cpf = ? WHERE id_usuario = ?";
+
+        try
+        {
+            Connection  conn = this.getConnection();
+            PreparedStatement statementUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
+
+            statementUsuario.setString(1, usuario.getNome());
+            statementUsuario.setString(2, usuario.getEmail());
+            statementUsuario.setString(3, usuario.getSenha());
+            statementUsuario.setString(4, usuario.getCpf());
+
+            statementUsuario.setLong(5, usuario.getIdUsuario());
+
+            statementUsuario.executeUpdate();
+
+            if (usuario instanceof Cliente)
+            {
+                updateCliente(conn, (Cliente) usuario);
+            }
+
+            statementUsuario.close();
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateCliente(Connection conn,  Cliente cliente) {
+        String sqlCliente = "UPDATE Cliente SET sexo = ?, data_nascimento = ? WHERE id_usuario = ?";
+
+        try
+        {
+            PreparedStatement statementCliente = conn.prepareStatement(sqlCliente);
+
+            statementCliente.setString(1, cliente.getSexo().toString());
+            Date sqlDate = new java.sql.Date(cliente.getDataNascimento().getTime());
+            statementCliente.setDate(2, sqlDate);
+
+            statementCliente.setLong(3, cliente.getIdUsuario());
+
+            statementCliente.executeUpdate();
+
+            statementCliente.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

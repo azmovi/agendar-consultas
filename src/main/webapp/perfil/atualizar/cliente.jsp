@@ -72,9 +72,10 @@
     </style>
 </head>
 <body>
-    <c:if test="${not empty sessionScope.erroNovoUsuario}">
+
+    <c:if test="${not empty sessionScope.erroAtualizarCliente}">
         <script>
-            alert("${sessionScope.erroNovoUsuario}");
+            alert("${sessionScope.erroAtualizarCliente}");
         </script>
     </c:if>
 
@@ -83,14 +84,15 @@
             <div class="titulo">
                 <h1>BuscarX</h1>
             </div>
-            <a href="/AgendarConsultas/cadastro/cadastro.jsp" class="btn voltar">
+            <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn voltar">
                 <fmt:message key="voltar"/>
             </a>
         </header>
+
         <div class="formulario">
-            <form id="form" action="/AgendarConsultas/cliente" method="post">
+            <form id="forms" action="/AgendarConsultas/cliente" method="POST">
                 <h3>
-                    <fmt:message key="cliente" />
+                    <fmt:message key="seus_dados" />
                 </h3>
 
                 <label for="nome">
@@ -100,7 +102,7 @@
                     type="text"
                     id="nome"
                     name="nome"
-                    value="${sessionScope.nome != null ? sessionScope.nome : ''}"
+                    value="${sessionScope.cliente.nome != null ? sessionScope.cliente.nome : ''}"
                     required
                 ><br>
 
@@ -111,7 +113,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="${sessionScope.email != null ? sessionScope.email : ''}"
+                    value="${sessionScope.cliente.email != null ? sessionScope.cliente.email : ''}"
                     required
                 ><br>
 
@@ -122,7 +124,7 @@
                     type="password"
                     id="senha"
                     name="senha"
-                    value="${sessionScope.senha != null ? sessionScope.senha : ''}"
+                    value="${sessionScope.cliente.senha != null ? sessionScope.cliente.senha : ''}"
                     required
                 ><br>
 
@@ -133,7 +135,7 @@
                     type="number"
                     id="cpf"
                     name="cpf"
-                    value="${sessionScope.cpf != null ? sessionScope.cpf : ''}"
+                    value="${sessionScope.cliente.cpf != null ? sessionScope.cliente.cpf : ''}"
                     required
                 ><br>
 
@@ -142,13 +144,13 @@
                 </label><br>
 
                 <select name="sexo" id="opcao">
-                    <option value="masculino" ${'masculino' eq sessionScope.sexoString ? 'selected' : ''}>
+                    <option value="masculino" ${'masculino' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="masculino"/>
                     </option>
-                    <option value="feminino" ${'feminino' eq sessionScope.sexoString ? 'selected' : ''}>
+                    <option value="feminino" ${'feminino' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="feminino"/>
                     </option>
-                    <option value="outro" ${'outro' eq sessionScope.sexoString ? 'selected' : ''}>
+                    <option value="outro" ${'outro' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="outro"/>
                     </option>
                 </select> <br>
@@ -161,7 +163,7 @@
                     id="nascimento"
                     name="nascimento"
                     required
-                    value="${sessionScope.dataNascimentoString != null ? sessionScope.dataNascimentoString : ''}"
+                    value="${sessionScope.cliente.dataNascimento != null ? sessionScope.cliente.dataNascimento: ''}"
                 ><br>
 
                 <input
@@ -173,8 +175,7 @@
         </div>
     </fmt:bundle>
     <script>
-        console.log("${sessionScope.action}")
-    </scirpt>
+    </script>
 </body>
 </html>
 

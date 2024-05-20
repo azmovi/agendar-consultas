@@ -48,7 +48,7 @@ public class ProfissionalController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        if (usuarioDAO.usuarioValido(email, cpf))
+        if (usuarioDAO.getIdUsuario(email, cpf) == 0)
         {
             Profissional profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
             usuarioDAO.insertUsuario(profissional);
