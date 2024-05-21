@@ -153,7 +153,7 @@
     </fmt:bundle>
     <script>
         window.onload = function() {
-            fetch("get_profissionais")
+            fetch("/AgendarConsultas/profissional")
         }
     </script>
 </body>

@@ -134,6 +134,7 @@
     <main>
         <div class="opcao">
             <div class="botao atualizar" onclick="atualizarUsuario()"> 
+                <input type="hidden" name="action" value="update">
                 <fmt:message key="atualizar"/>
             </div>
             <hr>
@@ -141,7 +142,7 @@
                 <fmt:message key="consultas"/>
             </div>
             <hr>
-            <div class="botao desconectar">
+            <div class="botao desconectar" onclick="desconectarUsuario()">
                 <fmt:message key="desconectar"/>
             </div>
         </div>
@@ -150,6 +151,9 @@
     <script>
         function atualizarUsuario(){
          window.location.href = "${path}";
+        }
+        function desconectarUsuario(){
+            window.location.href = "/AgendarConsultas/usuario?action=logout";
         }
     </script>
 </body>

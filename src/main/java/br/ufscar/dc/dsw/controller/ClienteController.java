@@ -35,7 +35,6 @@ public class ClienteController extends HttpServlet {
         String[] parts = path.split("/");
         String action = parts[parts.length - 2];
         HttpSession session = request.getSession();
-
         try{
             switch (action) {
                 case "cadastro":
@@ -77,9 +76,8 @@ public class ClienteController extends HttpServlet {
         if (idUsuario != 0){
             cliente.setIdUsuario(idUsuario);
             session.setAttribute("cliente", cliente);
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/AgendarConsultas");
         }
-
         else
         {
             session.setAttribute("nome", nome);

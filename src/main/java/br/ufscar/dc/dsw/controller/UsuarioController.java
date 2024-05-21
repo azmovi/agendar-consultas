@@ -1,8 +1,6 @@
 package br.ufscar.dc.dsw.controller;
-
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +12,7 @@ import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 
-@WebServlet(urlPatterns = {"/logar_usuario"})
+@WebServlet(urlPatterns = {"/usuario"})
 public class UsuarioController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -29,15 +27,34 @@ public class UsuarioController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+
+        switch (action) {
+            case "login":
+                logar(request, response, session);
+                break;
+
+            case "logout":
+                invalidar(request, response, session);
+                break;
+
+            default:
+                invalidar(request, response, session);
+                break;
+        }
+    }
+
+    protected void logar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
+    {
+        session.removeAttribute("erroLogarUsuario");
+
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
 
         Usuario usuario = usuarioDAO.getUsuario(email, senha);
 
-        HttpSession session = request.getSession();
-        session.removeAttribute("erroLogarUsuario");
         String tipo_usuario = "profissional";
-
         if (usuario != null)
         {
             if (usuario instanceof Cliente)
@@ -51,8 +68,12 @@ public class UsuarioController extends HttpServlet {
         else
         {
             session.setAttribute("erroLogarUsuario", "Email ou Senha incorretos");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login/login.jsp");
-            dispatcher.forward(request, response);
+            response.sendRedirect("/AgendarConsultas/login/login.jps");
         }
+    }
+
+    protected void invalidar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+        session.invalidate();
+        response.sendRedirect("index.jsp");
     }
 }

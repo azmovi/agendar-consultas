@@ -98,7 +98,7 @@
         </header>
 
         <div class="formulario">
-            <form id="form" action="/AgendarConsultas/criar_profissional" method="post">
+            <form id="form" action="/AgendarConsultas/profissional" method="post">
                 <h3>
                     <fmt:message key="profissional" />
                 </h3>

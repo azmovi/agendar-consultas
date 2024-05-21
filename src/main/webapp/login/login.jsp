@@ -94,7 +94,8 @@
         </header>
 
         <div class="formulario">
-            <form action="/AgendarConsultas/logar_usuario" method="GET">
+            <form action="/AgendarConsultas/usuario" method="GET">
+                <input type="hidden" name="action" value="login">
 
                 <h3>Login de Usuario</h3>
 
