@@ -33,6 +33,7 @@ public class UsuarioController extends HttpServlet {
         String senha = request.getParameter("senha");
 
         Usuario usuario = usuarioDAO.getUsuario(email, senha);
+
         HttpSession session = request.getSession();
         session.removeAttribute("erroLogarUsuario");
         String tipo_usuario = "profissional";

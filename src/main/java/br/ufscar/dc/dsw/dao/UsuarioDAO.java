@@ -15,9 +15,10 @@ import br.ufscar.dc.dsw.util.Sexo;
 
 public class UsuarioDAO extends GenericDAO {
 
-    public void insertUsuario(Usuario usuario) {
+    public long inserirUsuario(Usuario usuario) {
 
         String sqlUsuario = "INSERT INTO Usuario(nome, email, senha, cpf) VALUES (?, ?, ?, ?)";
+        long idUsuario = 0;
         try
         {
             Connection  conn = this.getConnection();
@@ -32,7 +33,7 @@ public class UsuarioDAO extends GenericDAO {
 
             ResultSet generatedKeys = statementUsuario.getGeneratedKeys();
             if (generatedKeys.next()) {
-                long idUsuario = generatedKeys.getLong(1);
+                idUsuario = generatedKeys.getLong(1);
 
                 if (usuario instanceof Cliente)
                 {
@@ -51,6 +52,7 @@ public class UsuarioDAO extends GenericDAO {
         {
             throw new RuntimeException(e);
         }
+        return idUsuario;
     }
 
     public void insertCliente(Connection conn, Long idUsuario, Cliente cliente) {
@@ -112,7 +114,9 @@ public class UsuarioDAO extends GenericDAO {
                 if (resultSet.next()) {
                     idUser = resultSet.getLong("id_usuario");
                 }
+                resultSet.close();
             }
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -134,19 +138,20 @@ public class UsuarioDAO extends GenericDAO {
             try (ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next()) {
-                    long id = resultSet.getLong("id_usuario");
+                    long idUsuario = resultSet.getLong("id_usuario");
                     String nome = resultSet.getString("nome");
                     String cpf = resultSet.getString("cpf");
 
-                    if (eUmCliente(conn, id))
+                    if (eUmCliente(conn, idUsuario))
                     {
-                        usuario = getCliente(conn, id, nome, email, senha, cpf);
+                        usuario = getCliente(conn, idUsuario, nome, email, senha, cpf);
                     }
                     else
                     {
-                        usuario = getProfissional(conn, id, nome, email, senha, cpf);
+                        usuario = getProfissional(conn, idUsuario, nome, email, senha, cpf);
                     }
                 }
+                resultSet.close();
             }
             statement.close();
             conn.close();
@@ -158,7 +163,7 @@ public class UsuarioDAO extends GenericDAO {
 
         return usuario;
     }
-    public boolean eUmCliente(Connection conn, long id)
+    public boolean eUmCliente(Connection conn, long idUsuario)
     {
         boolean encontrando = false;
         String sql = "SELECT * FROM Cliente WHERE Cliente.id_usuario = ?";
@@ -166,14 +171,16 @@ public class UsuarioDAO extends GenericDAO {
         {
 
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setLong(1, id);
+            statement.setLong(1, idUsuario);
             try(ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
                 {
                     encontrando = true;
                 }
+                resultSet.close();
             }
+            statement.close();
         }
         catch (SQLException e)
         {
@@ -182,14 +189,14 @@ public class UsuarioDAO extends GenericDAO {
         return encontrando;
     }
 
-    public Cliente getCliente(Connection conn, Long id, String nome, String email, String senha, String cpf)
+    public Cliente getCliente(Connection conn, Long idUsuario, String nome, String email, String senha, String cpf)
     {
         Cliente cliente = null;
         String sql = "SELECT * FROM Cliente WHERE id_usuario = ?";
         try
         {
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setLong(1, id);
+            statement.setLong(1, idUsuario);
             try(ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
@@ -200,9 +207,11 @@ public class UsuarioDAO extends GenericDAO {
 
                     Date dataNascimento = resultSet.getDate("data_nascimento");
 
-                    cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
+                    cliente = new Cliente(idUsuario, nome, email, senha, cpf, sexo, dataNascimento);
                 }
+                resultSet.close();
             }
+            statement.close();
         }
         catch (SQLException e)
         {
@@ -212,14 +221,14 @@ public class UsuarioDAO extends GenericDAO {
         return cliente;
     }
 
-    public Profissional getProfissional(Connection conn, Long id, String nome, String email, String senha, String cpf)
+    public Profissional getProfissional(Connection conn, Long idUsuario, String nome, String email, String senha, String cpf)
     {
         Profissional profissional = null;
         String sql = "SELECT * FROM Profissional WHERE id_usuario = ?";
         try
         {
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setLong(1, id);
+            statement.setLong(1, idUsuario);
             try(ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
@@ -227,9 +236,11 @@ public class UsuarioDAO extends GenericDAO {
                     String especialidade = resultSet.getString("especialidade");
                     byte[] pdfData = resultSet.getBytes("pdf_data");
 
-                    profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
+                    profissional = new Profissional(idUsuario, nome, email, senha, cpf, especialidade, pdfData);
                 }
+                resultSet.close();
             }
+            statement.close();
         }
         catch (SQLException e)
         {
@@ -238,27 +249,33 @@ public class UsuarioDAO extends GenericDAO {
         return profissional;
     }
 
-    public void updateUsuario(Usuario usuario) {
+    public boolean updateUsuario(Usuario usuario) {
 
         String sqlUsuario= "UPDATE Usuario SET nome = ?, email = ?, senha = ?, cpf = ? WHERE id_usuario = ?";
+        boolean deuCerto = false;
 
         try
         {
             Connection  conn = this.getConnection();
-            PreparedStatement statementUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statementUsuario = conn.prepareStatement(sqlUsuario);
 
-            statementUsuario.setString(1, usuario.getNome());
-            statementUsuario.setString(2, usuario.getEmail());
-            statementUsuario.setString(3, usuario.getSenha());
-            statementUsuario.setString(4, usuario.getCpf());
+            long idUsuario = usuario.getIdUsuario();
 
-            statementUsuario.setLong(5, usuario.getIdUsuario());
+            if (updateValido(conn, usuario, idUsuario)){
+                statementUsuario.setString(1, usuario.getNome());
+                statementUsuario.setString(2, usuario.getEmail());
+                statementUsuario.setString(3, usuario.getSenha());
+                statementUsuario.setString(4, usuario.getCpf());
 
-            statementUsuario.executeUpdate();
+                statementUsuario.setLong(5, idUsuario);
 
-            if (usuario instanceof Cliente)
-            {
-                updateCliente(conn, (Cliente) usuario);
+                int linhaAlteradas = statementUsuario.executeUpdate();
+                deuCerto = (linhaAlteradas > 0);
+
+                if (usuario instanceof Cliente)
+                {
+                    updateCliente(conn, (Cliente) usuario, idUsuario);
+                }
             }
 
             statementUsuario.close();
@@ -268,9 +285,10 @@ public class UsuarioDAO extends GenericDAO {
         {
             throw new RuntimeException(e);
         }
+        return deuCerto;
     }
 
-    public void updateCliente(Connection conn,  Cliente cliente) {
+    public void updateCliente(Connection conn,  Cliente cliente, long idUsuario) {
         String sqlCliente = "UPDATE Cliente SET sexo = ?, data_nascimento = ? WHERE id_usuario = ?";
 
         try
@@ -281,7 +299,7 @@ public class UsuarioDAO extends GenericDAO {
             Date sqlDate = new java.sql.Date(cliente.getDataNascimento().getTime());
             statementCliente.setDate(2, sqlDate);
 
-            statementCliente.setLong(3, cliente.getIdUsuario());
+            statementCliente.setLong(3, idUsuario);
 
             statementCliente.executeUpdate();
 
@@ -291,5 +309,35 @@ public class UsuarioDAO extends GenericDAO {
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean updateValido(Connection conn, Usuario usuario, long idUsuario) {
+        return (!existeAtributo(conn, "email", usuario.getEmail(), idUsuario) && !existeAtributo(conn, "cpf", usuario.getCpf(), idUsuario));
+    }
+
+    public boolean existeAtributo(Connection conn, String coluna, String valor, long idUsuario) {
+        boolean flag = false;
+        String sql = "SELECT * FROM Usuario WHERE " + coluna + " = ? AND id_usuario != ? LIMIT 1";
+        try
+        {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, valor);
+            statement.setLong(2, idUsuario);
+
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                 if (resultSet.next())
+                 {
+                    flag = true;
+                 }
+                resultSet.close();
+            }
+            statement.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return flag;
     }
 }

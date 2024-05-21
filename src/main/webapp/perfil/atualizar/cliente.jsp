@@ -91,6 +91,7 @@
 
         <div class="formulario">
             <form id="forms" action="/AgendarConsultas/cliente" method="POST">
+                <input type="hidden" name="cliente" value="${sessionScope.cliente}" />
                 <h3>
                     <fmt:message key="seus_dados" />
                 </h3>
@@ -144,13 +145,13 @@
                 </label><br>
 
                 <select name="sexo" id="opcao">
-                    <option value="masculino" ${'masculino' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
+                    <option value="masculino" ${'MASCULINO' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="masculino"/>
                     </option>
-                    <option value="feminino" ${'feminino' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
+                    <option value="feminino" ${'FEMININO' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="feminino"/>
                     </option>
-                    <option value="outro" ${'outro' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
+                    <option value="outro" ${'OUTRO' eq String(sessionScope.cliente.sexo)? 'selected' : ''}>
                         <fmt:message key="outro"/>
                     </option>
                 </select> <br>
@@ -163,7 +164,7 @@
                     id="nascimento"
                     name="nascimento"
                     required
-                    value="${sessionScope.cliente.dataNascimento != null ? sessionScope.cliente.dataNascimento: ''}"
+                    value="${sessionScope.cliente.dataNascimento!= null ? sessionScope.cliente.dataNascimento: ''}"
                 ><br>
 
                 <input

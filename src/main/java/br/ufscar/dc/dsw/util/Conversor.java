@@ -3,8 +3,7 @@ package br.ufscar.dc.dsw.util;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import java.sql.Date;
 
 public class Conversor {
 
@@ -13,7 +12,7 @@ public class Conversor {
         Date dataFormatada = null;
         try
         {
-            dataFormatada = format.parse(dataString);
+            dataFormatada = new Date(format.parse(dataString).getTime());
         }
         catch (ParseException e)
         {

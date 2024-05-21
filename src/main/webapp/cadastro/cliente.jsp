@@ -173,7 +173,6 @@
         </div>
     </fmt:bundle>
     <script>
-        console.log("${sessionScope.action}")
     </scirpt>
 </body>
 </html>

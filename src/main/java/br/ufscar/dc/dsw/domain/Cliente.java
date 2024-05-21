@@ -1,6 +1,6 @@
 package br.ufscar.dc.dsw.domain;
 
-import java.util.Date;
+import java.sql.Date;
 import br.ufscar.dc.dsw.util.Sexo;
 
 public class Cliente extends Usuario {

@@ -51,7 +51,7 @@ public class ProfissionalController extends HttpServlet {
         if (usuarioDAO.getIdUsuario(email, cpf) == 0)
         {
             Profissional profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
-            usuarioDAO.insertUsuario(profissional);
+            usuarioDAO.inserirUsuario(profissional);
 
             session.setAttribute("profissional", profissional);
             response.sendRedirect("/AgendarConsultas");

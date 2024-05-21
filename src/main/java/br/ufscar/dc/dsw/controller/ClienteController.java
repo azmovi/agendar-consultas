@@ -1,7 +1,7 @@
 package br.ufscar.dc.dsw.controller;
 
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Date;
 
 //import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,27 +31,23 @@ public class ClienteController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-
         String path = request.getHeader("Referer");
         String[] parts = path.split("/");
-        String service = parts[parts.length - 2];
-
-        Cliente cliente = configCliente(request, session, service);
+        String action = parts[parts.length - 2];
+        HttpSession session = request.getSession();
 
         try{
-            switch (service) {
+            switch (action) {
                 case "cadastro":
-                    registrar(response, session, cliente);
+                    registrar(request, response, session);
                     break;
 
                 case "atualizar":
-                    atualizar(response, session, cliente);
+                    atualizar(request, response, session);
                     break;
 
                 default:
-                    session.invalidate();
-                    response.sendRedirect("index.jsp");
+                    invalidar(request, response, session);
                     break;
             }
         }
@@ -61,8 +57,7 @@ public class ClienteController extends HttpServlet {
         }
     }
 
-    protected Cliente configCliente(HttpServletRequest request, HttpSession session, String service) throws ServletException, IOException {
-        Cliente cliente = null;
+    protected void registrar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
@@ -75,11 +70,14 @@ public class ClienteController extends HttpServlet {
         Date dataNascimento = conversor.StringParaData(dataNascimentoString);
         Sexo sexo = conversor.StringParaSexo(sexoString);
 
-        long idUsuario = usuarioDAO.getIdUsuario(email, cpf);
+        Cliente cliente = new Cliente(nome, email, senha, cpf, sexo, dataNascimento);
 
-        if ((service.equals("cadastro") && idUsuario == 0) || (service.equals("atualizar") && idUsuario != 0))
-        {
-            cliente = new Cliente(idUsuario, nome, email, senha, cpf, sexo, dataNascimento);
+        long idUsuario = usuarioDAO.inserirUsuario(cliente);
+
+        if (idUsuario != 0){
+            cliente.setIdUsuario(idUsuario);
+            session.setAttribute("cliente", cliente);
+            response.sendRedirect("index.jsp");
         }
 
         else
@@ -90,42 +88,52 @@ public class ClienteController extends HttpServlet {
             session.setAttribute("cpf", cpf);
             session.setAttribute("dataNascimentoString", dataNascimentoString);
             session.setAttribute("sexoString", sexoString);
-        }
 
-        return cliente;
-    }
-
-    protected void registrar(HttpServletResponse response, HttpSession session, Cliente cliente) throws ServletException, IOException {
-        if (cliente != null)
-        {
-            usuarioDAO.insertUsuario(cliente);
-            session.setAttribute("cliente", cliente);
-            response.sendRedirect("index.jsp");
-        }
-        else
-        {
             session.setAttribute("erroNovoUsuario", "Este EMAIL ou CPF já está em uso.");
             response.sendRedirect("/AgendarConsultas/cadastro/cliente.jsp");
-
-            //RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/cliente.jsp");
-            //dispatcher.forward(request, response);
         }
     }
 
-    protected void atualizar(HttpServletResponse response, HttpSession session, Cliente cliente) throws ServletException, IOException {
-        if (cliente != null)
+    protected void atualizar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+
+        long idUsuario = 0;
+        Object obj = session.getAttribute("cliente");
+
+        if (obj instanceof Cliente) {
+            Cliente cliente = (Cliente) obj;
+            idUsuario = cliente.getIdUsuario();
+        }
+
+        String nome = request.getParameter("nome");
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
+        String cpf = request.getParameter("cpf");
+        String dataNascimentoString = request.getParameter("nascimento");
+        String sexoString = request.getParameter("sexo");
+
+        Conversor conversor = new Conversor();
+        Date dataNascimento = conversor.StringParaData(dataNascimentoString);
+        Sexo sexo = conversor.StringParaSexo(sexoString);
+
+
+        Cliente cliente = new Cliente(idUsuario, nome, email, senha, cpf, sexo, dataNascimento);
+
+        boolean deuCerto = usuarioDAO.updateUsuario(cliente);
+        if (deuCerto)
         {
-            usuarioDAO.updateUsuario(cliente);
             session.setAttribute("cliente", cliente);
             response.sendRedirect("/AgendarConsultas/perfil/usuario.jsp");
         }
+
         else
         {
             session.setAttribute("erroAtualizarCliente", "Este EMAIL ou CPF já está em uso.");
             response.sendRedirect("/AgendarConsultas/perfil/atualizar/cliente.jsp");
-
-            //RequestDispatcher dispatcher = request.getRequestDispatcher("cadastro/cliente.jsp");
-            //dispatcher.forward(request, response);
         }
+    }
+
+    protected void invalidar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+        session.invalidate();
+        response.sendRedirect("index.jsp");
     }
 }

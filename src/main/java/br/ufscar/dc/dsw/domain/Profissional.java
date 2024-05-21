@@ -11,6 +11,12 @@ public class Profissional extends Usuario {
         this.pdfData = pdfData;
     }
 
+    public Profissional(Long idUsuario, String nome, String email, String senha, String cpf, String especialidade, byte[] pdfData) {
+        super(idUsuario, nome, email, senha, cpf);
+        this.especialidade = especialidade;
+        this.pdfData = pdfData;
+    }
+
     public Profissional(String nome, String especialidade) {
         super(nome);
         this.especialidade = especialidade;
