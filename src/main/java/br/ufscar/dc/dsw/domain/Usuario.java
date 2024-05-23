@@ -27,7 +27,15 @@ public class Usuario{
 		this.cpf = cpf;
 	}
 
-	public Usuario(String nome) {
+	public Usuario(Long idUsuario, String nome, String email, String cpf) {
+		this.idUsuario = idUsuario;
+		this.nome = nome;
+		this.email = email;
+		this.cpf = cpf;
+	}
+
+	public Usuario(Long idUsuario, String nome) {
+        this.idUsuario = idUsuario;
 		this.nome = nome;
 	}
 

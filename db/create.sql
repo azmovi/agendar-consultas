@@ -30,12 +30,12 @@ create table Cliente(
 
 create table Agendamento (
     id_agendamento bigint not null PRIMARY KEY,
-    id_cliente bigint,
-    id_profissional bigint,
-    data_agendamento date not null,
-    hora_agendamento time not null,
-    FOREIGN KEY(id_cliente) REFERENCES Cliente(id_cliente),
-    FOREIGN KEY(id_profissional) REFERENCES Profissional(id_profissional)
+    id_usuario_cliente bigint,
+    id_usuario_profissional bigint,
+    data date not null,
+    horario time not null,
+    FOREIGN KEY(id_usuario_cliente) REFERENCES Cliente(id_usuario),
+    FOREIGN KEY(id_profissional) REFERENCES Profissional(id_usuario)
 );
 
 quit

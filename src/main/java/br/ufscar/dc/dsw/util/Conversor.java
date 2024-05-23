@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.sql.Time;
 
 public class Conversor {
 
@@ -41,5 +42,10 @@ public class Conversor {
         byte[] pdfData = pdfString.getBytes(StandardCharsets.UTF_8);
 
         return pdfData;
+    }
+
+    public Time StringParaHorario(String horarioString)
+    {
+        return Time.valueOf(horarioString);
     }
 }
