@@ -16,6 +16,7 @@ import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
 import br.ufscar.dc.dsw.dao.AgendamentoDAO;
+import br.ufscar.dc.dsw.dao.ProfissionalDAO;
 
 @WebServlet(urlPatterns = {"/agendamento"})
 
@@ -24,10 +25,12 @@ public class AgendamentoController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private AgendamentoDAO agendamentoDAO;
+    private ProfissionalDAO profissionalDAO;
 
     @Override
     public void init() {
         agendamentoDAO = new AgendamentoDAO();
+        profissionalDAO = new ProfissionalDAO();
     }
 
     @Override
@@ -50,11 +53,20 @@ public class AgendamentoController extends HttpServlet {
 
     protected void consultarPerfil(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
     {
-        Object objProfissional =  session.getAttribute("ProfissionalEscolhido");
+        Long idUsuarioProfissionalEscolhido =  Long.parseLong(request.getParameter("IdProfissionalEscolhido"));
+        Profissional profissionalEscolhido = profissionalDAO.getProfissional(idUsuarioProfissionalEscolhido);
 
-        if (objProfissional instanceof Profissional) {
-            Profissional profissionalEscolhido = (Profissional) objProfissional;
+        if (profissionalEscolhido != null)
+        {
+            session.setAttribute("profissionalEscolhido", profissionalEscolhido);
+            response.sendRedirect("/AgendarConsultas/forms_agendamento.jsp");
         }
+        else
+        {
+            session.setAttribute("errorProfissinalNaoExiste", "Nao foi possivel encontrar esse Profissional");
+            response.sendRedirect("/AgendarConsultas");
+        }
+
     }
 
 
@@ -72,13 +84,12 @@ public class AgendamentoController extends HttpServlet {
             idUsuarioCliente = cliente.getIdUsuario();
         }
         
-        Object objProfissional = session.getAttribute("profissionalPerfil");
+        Object objProfissional = session.getAttribute("profissionalEscolhido");
         
         if (objProfissional instanceof Profissional) {
             Profissional profissional = (Profissional) objProfissional;
             idUsuarioProfissional = profissional.getIdUsuario();
         }
-
 
         String dataString = request.getParameter("data");
         String horarioString = request.getParameter("horario"); 
@@ -90,20 +101,30 @@ public class AgendamentoController extends HttpServlet {
 
         Agendamento agendamento = new Agendamento(idUsuarioCliente, idUsuarioProfissional, data, horario);
 
-        long idAgendamento = agendamentoDAO.cadastrarConsulta(agendamento);
+        if (agendamentoDAO.agendamentoValido(data, horario))
+        {
+            long idAgendamento = agendamentoDAO.cadastrarConsulta(agendamento);
 
-        if (idAgendamento != 0){
-            agendamento.setIdAgendamento(idAgendamento);
-            session.setAttribute("agendamento", agendamento);
+            if (idAgendamento != 0){
+                agendamento.setIdAgendamento(idAgendamento);
+                session.setAttribute("agendamento", agendamento);
+                session.setAttribute("agendamentoFeito", "Seu agendamento foi cadastrado");
+                response.sendRedirect("/AgendarConsultas");
+                return;
+            }
+            else
+            {
+                session.setAttribute("erroAgendamento", "Não foi possivel fazer o agendamento");
+            }
         }
-
         else
         {
-            session.setAttribute("data", data);
-            session.setAttribute("horario", horario);
-            session.setAttribute("erroCriarAgendamento", "Não foi possivel realizar esse Agendamento");
+            session.setAttribute("erroAgendamento", "Data ou horário invalidos/indisponiveis");
         }
-            response.sendRedirect("/AgendarConsultas");
+
+        session.setAttribute("data", data);
+        session.setAttribute("horario", horario);
+        response.sendRedirect("/AgendarConsultas/forms_agendamento.jsp");
     }
 
     protected void invalidar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {

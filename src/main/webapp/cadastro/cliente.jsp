@@ -76,6 +76,7 @@
         <script>
             alert("${sessionScope.erroNovoUsuario}");
         </script>
+        <c:remove var="erroNovoUsuario" scope="session"/>
     </c:if>
 
     <fmt:bundle basename="messages">

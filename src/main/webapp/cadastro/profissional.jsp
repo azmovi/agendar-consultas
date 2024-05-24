@@ -85,6 +85,7 @@
         <script>
             alert('${sessionScope.ErrorCriarNovoUsuario}');
         </script>
+        <c:remove var="erroNovoUsuario" scope="session"/>
     </c:if>
 
     <fmt:bundle basename="messages">

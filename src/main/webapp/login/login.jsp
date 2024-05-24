@@ -80,6 +80,7 @@
         <script>
             alert("${sessionScope.erroLogarUsuario}");
         </script>
+        <c:remove var="erroLogarUsuario" scope="session"/>
     </c:if>
 
     <fmt:bundle basename="messages">

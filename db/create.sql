@@ -23,19 +23,19 @@ create table Profissional(
 create table Cliente(
     id_cliente bigint not null auto_increment PRIMARY KEY,
     id_usuario bigint not null,
-    sexo enum('MASCULINO', 'FEMINIMO', 'OUTRO') not null,
+    sexo enum('MASCULINO', 'FEMININO', 'OUTRO') not null,
     data_nascimento date not null,
     FOREIGN KEY(id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table Agendamento (
-    id_agendamento bigint not null PRIMARY KEY,
+    id_agendamento bigint not null auto_increment PRIMARY KEY,
     id_usuario_cliente bigint,
     id_usuario_profissional bigint,
     data date not null,
     horario time not null,
-    FOREIGN KEY(id_usuario_cliente) REFERENCES Cliente(id_usuario),
-    FOREIGN KEY(id_profissional) REFERENCES Profissional(id_usuario)
+    FOREIGN KEY(id_usuario_cliente) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(id_usuario_profissional) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 quit

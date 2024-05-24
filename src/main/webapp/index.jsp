@@ -110,6 +110,13 @@
     <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
     <c:set var="agendamento" value="${sessionScope.agendamento}" />
 
+    <c:if test="${not empty agendamento}">
+        <script>
+            alert("${sessionScope.agendamentoFeito}");
+        </script>
+        <c:remove var="agendamento" scope="session"/>
+    </c:if>
+
     <fmt:bundle basename="messages">
     <header>
         <div class="titulo">BuscarX</div>
@@ -141,7 +148,7 @@
         <h1 align="center"> Lista de Profissionais </h1>
             <div class="tabela">
                 <c:forEach var="profissional" items="${listaProfissionais}">
-                    <a id="consultarPerfil" class="botao" href="/AgendarConsultas/agendamento?action=consultarPerfil&ProfissionalEscolhido=${profissional}">
+                    <a id="consultarPerfil" class="botao" href="/AgendarConsultas/agendamento?action=consultarPerfil&IdProfissionalEscolhido=${profissional.idUsuario}">
                         <div class="nome">
                             ${profissional.nome}
                         </div>
@@ -159,19 +166,22 @@
             fetch("/AgendarConsultas/profissional")
 
             var butaoConsultarPerfil = document.getElementById("consultarPerfil");
-            butaoConsultarPerfil.onclick = function(event){
-                var cliente = ${cliente != null ? 'true' : 'false'};
-                var profissional = ${profissional != null ? 'true' : 'false'};
+            if(butaoConsultarPerfil != null){
+                butaoConsultarPerfil.onclick = function(event){
+                    var cliente = ${cliente != null ? 'true' : 'false'};
+                    var profissional = ${profissional != null ? 'true' : 'false'};
 
-                if (!cliente && !profissional)
-                {
-                    event.preventDefault();
-                    alert('Você precisa fazer login ou cadastro antes de acessar o perfil do Profissional.');
+                    if (!cliente && !profissional)
+                    {
+                        event.preventDefault();
+                        alert('Você precisa fazer login ou cadastro antes de acessar o perfil do Profissional.');
+                    }
                 }
             }
-            console.log("${agendamento.idAgemento}")
+            console.log("${agendamento.idAgendamento}")
             console.log("${agendamento.idUsuarioCliente}")
             console.log("${agendamento.idUsuarioProfissional}")
+            console.log("${profissional.idUsuario}")
         }
     </script>
 </body>

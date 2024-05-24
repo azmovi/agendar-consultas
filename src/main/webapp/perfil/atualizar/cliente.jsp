@@ -77,6 +77,7 @@
         <script>
             alert("${sessionScope.erroAtualizarCliente}");
         </script>
+        <c:remove var="erroAtualizarCliente" scope="session"/>
     </c:if>
 
     <fmt:bundle basename="messages">

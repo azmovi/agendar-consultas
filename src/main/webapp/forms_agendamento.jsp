@@ -155,7 +155,14 @@
 <body>
     <c:set var="cliente" value="${sessionScope.cliente}" />
     <c:set var="profissional" value="${sessionScope.profissional}" />
-    <c:set var="profissionalPerfil" value="${sessionScope.profissionalPerfil}" />
+    <c:set var="profissionalEscolhido" value="${sessionScope.profissionalEscolhido}" />
+
+    <c:if test="${not empty sessionScope.erroAgendamento}">
+        <script>
+            alert("${sessionScope.erroAgendamento}");
+        </script>
+        <c:remove var="erroAgendamento" scope="session"/>
+    </c:if>
 
     <fmt:bundle basename="messages">
     <header>
@@ -186,8 +193,8 @@
     </header>
     <main>
         <h1 align="center"> <fmt:message key="consulta" /> </h1>
-        <h2 align="center"> <fmt:message key="nome" /> ${profissionalPerfil.nome}</h2>
-        <h3 align="center"> <fmt:message key="especialidade" /> ${profissionalPerfil.especialidade}</h3>
+        <h2 align="center"> <fmt:message key="nome" /> ${profissionalEscolhido.nome}</h2>
+        <h3 align="center"> <fmt:message key="especialidade" /> ${profissionalEscolhido.especialidade}</h3>
         <form id="form" action="/AgendarConsultas/agendamento" method="post">
             <label for="data">
                 <fmt:message key="data" />
@@ -207,6 +214,7 @@
                 type="time"
                 id="horario"
                 name="horario"
+                step="1"
                 value="${sessionScope.horario != null ? sessionScope.horario : ''}"
                 required
             >
