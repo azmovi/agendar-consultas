@@ -101,6 +101,7 @@
     <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
     <c:set var="path" value="/AgendarConsultas/perfil/atualizar" />
 
+
     <fmt:bundle basename="messages">
     <header>
         <div class="titulo">BuscarX</div>
@@ -111,12 +112,14 @@
                     <a href="/AgendarConsultas" class="btn cliente" >
                         <fmt:message key="BoasVindas" /> ${cliente.nome}
                         <c:set var="path" value="${path}/cliente.jsp" />
+                        <c:set var="idUsuario" value="${cliente.idUsuario}" />
                     </a>
                 </c:when>
                 <c:when test="${profissional != null}">
                     <a href="/AgendarConsultas" class="btn profissional">
                         <fmt:message key="BoasVindas" /> ${profissional.nome}
                         <c:set var="path" value="${path}/profissional.jsp" />
+                        <c:set var="idUsuario" value="${profissional.idUsuario}" />
                     </a>
                 </c:when>
                 <c:otherwise>
@@ -138,7 +141,7 @@
                 <fmt:message key="atualizar"/>
             </div>
             <hr>
-            <div class="botao consultas">
+            <div class="botao consultas" onclick="minhasConsultas()">
                 <fmt:message key="consultas"/>
             </div>
             <hr>
@@ -154,6 +157,9 @@
         }
         function desconectarUsuario(){
             window.location.href = "/AgendarConsultas/usuario?action=logout";
+        }
+        function minhasConsultas(){
+            window.location.href = "/AgendarConsultas/agendamento?action=minhasConsultas&idUsuario=${idUsuario}";
         }
     </script>
 </body>

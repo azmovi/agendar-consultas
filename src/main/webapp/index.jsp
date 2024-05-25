@@ -178,10 +178,6 @@
                     }
                 }
             }
-            console.log("${agendamento.idAgendamento}")
-            console.log("${agendamento.idUsuarioCliente}")
-            console.log("${agendamento.idUsuarioProfissional}")
-            console.log("${profissional.idUsuario}")
         }
     </script>
 </body>

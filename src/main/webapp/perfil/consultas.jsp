@@ -1,3 +1,8 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +63,7 @@
             padding: 5%;
         }
 
-        form{
+        .tabela{
             padding: 0% 0;
             margin: 5px;
             padding-top: 0%;
@@ -97,81 +102,70 @@
             border: 1px solid black;
         }
 
-        label {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 85%;
-            margin: 2%;
-            padding: 2%;
-            background-color: white;
-            border: 4px solid black;
-            border-radius: 10px;
-        }
-        .confirmar {
-            margin-left: 30%;
-            margin-right: 30%;
-            background-color: white;
-            font-weight: bold;
-            cursor: pointer;
-            width: 35%;
-            transition: border-color 0.3s ease, color 0.4s ease;
-        }
-        .confirmar:hover {
-            background-color: #28e673;
-            border-color: white;
-        }
     </style>
 </head>
 <body>
+    <c:set var="cliente" value="${sessionScope.cliente}" />
+    <c:set var="profissional" value="${sessionScope.profissional}" />
+    <c:set var="listaAgendamentoPorUsuario" value="${sessionScope.listaAgendamentoPorUsuario}" />
+
+    <c:if test="${not empty sessionScope.semConsultas}">
+        <script>
+            alert("${sessionScope.semConsultas}");
+        </script>
+        <c:remove var="semConsultas" scope="session"/>
+    </c:if>
+
+    <fmt:bundle basename="messages">
     <header>
         <div class="titulo">BuscarX</div>
 
         <div class="usuario">
-            <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn cliente">
-                <fmt:message key="BoasVindas" /> ${cliente.nome}
-            </a>
+            <c:choose>
+                <c:when test="${cliente != null}">
+                    <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn cliente">
+                        <fmt:message key="BoasVindas" /> ${cliente.nome}
+                    </a>
+                </c:when>
+                <c:when test="${profissional != null}">
+                    <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn profissional">
+                        <fmt:message key="BoasVindas" /> ${profissional.nome}
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="/AgendarConsultas/login/login.jsp" class="btn login">
+                        <fmt:message key="entrar"/>
+                    </a>
+                    <a href="/AgendarConsultas/cadastro/cadastro.jsp" class="btn cadastro">
+                        <fmt:message key="cadastro"/>
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
     </header>
     <main>
-        <h1 align="center"> ${profissionalPerfil.nome} </h1>
-        <h2 align="center"> ${profissionalPerfil.especialidade} </h1>
-        <form id="form" action="/AgendarConsultas/agendamento" method="post">
-            <label for="data">
-                Selecione um Data <fmt:message key="data"/>
-            </label> <br>
-            <input
-                type="date"
-                id="data"
-                name="data"
-                value="${sessionScope.data != null ? sessionScope.data: ''}"
-                required
-            ><br>
-
-            <label for="horario">
-                Selecione um Horário<fmt:message key="horario"/>
-            </label> <br>
-            <input
-                type="time"
-                id="horario"
-                name="horario"
-                value="${sessionScope.horario != null ? sessionScope.horario: ''}"
-                required
-            ><br>
-
-            <input
-                type="submit"
-                class="confirmar"
-                value=" Confirmar <fmt:message key='confirmar'/>"
-            >
-
-        </form>
+        <h1 align="center"> Lista de Profissionais </h1>
+            <div class="tabela">
+                <c:forEach var="agendamento" items="${listaAgendamentoPorUsuario}">
+                    <div class="nome">
+                        ${agendamento.nomeCliente}
+                    </div>
+                    <div class="nome">
+                        ${agendamento.nomeProfissional}
+                    </div>
+                    <div class="data">
+                        ${agendamento.data}
+                    </div>
+                    <div class="horario">
+                        ${agendamento.horario}
+                    </div>
+                    <hr>
+                </c:forEach>
+            </div>
     </main>
+    </fmt:bundle>
     <script>
         window.onload = function() {
-            fetch("/AgendarConsultas/profissional")
         }
     </script>
 </body>

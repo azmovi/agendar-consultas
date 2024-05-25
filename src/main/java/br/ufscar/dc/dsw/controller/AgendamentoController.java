@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw.controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,6 +45,10 @@ public class AgendamentoController extends HttpServlet {
                 consultarPerfil(request, response, session);
                 break;
 
+            case "minhasConsultas":
+                minhasConsultas(request, response, session);
+                break;
+
             default:
                 invalidar(request, response, session);
                 break;
@@ -69,6 +74,23 @@ public class AgendamentoController extends HttpServlet {
 
     }
 
+
+    protected void minhasConsultas(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
+    {
+        Long idUsuario =  Long.parseLong(request.getParameter("idUsuario"));
+
+        List<Agendamento> listaAgendamentoPorUsuario = agendamentoDAO.agendamentoPorUsuario(idUsuario);
+
+        if (listaAgendamentoPorUsuario.size() > 0)
+        {
+            session.setAttribute("listaAgendamentoPorUsuario", listaAgendamentoPorUsuario);
+        }
+        else
+        {
+            session.setAttribute("semConsultas", "Voce não tem nenhuma consulta agendada :(");
+        }
+        response.sendRedirect("/AgendarConsultas/perfil/consultas.jsp");
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

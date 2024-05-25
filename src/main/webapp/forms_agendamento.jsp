@@ -171,14 +171,23 @@
         <div class="usuario">
             <c:choose>
                 <c:when test="${cliente != null}">
+                    <a href="/AgendarConsultas/" class="btn voltar">
+                        <fmt:message key="voltar"/> 
+                    </a>
+
                     <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn cliente">
                         <fmt:message key="BoasVindas" /> ${cliente.nome}
                     </a>
                 </c:when>
                 <c:when test="${profissional != null}">
+                    <a href="/AgendarConsultas/" class="btn voltar">
+                        <fmt:message key="voltar"/> 
+                    </a>
+
                     <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn profissional">
                         <fmt:message key="BoasVindas" /> ${profissional.nome}
                     </a>
+
                 </c:when>
                 <c:otherwise>
                     <a href="/AgendarConsultas/login/login.jsp" class="btn login">
@@ -189,6 +198,7 @@
                     </a>
                 </c:otherwise>
             </c:choose>
+
         </div>
     </header>
     <main>

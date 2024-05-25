@@ -7,6 +7,8 @@ public class Agendamento{
     private long idAgendamento;
     private long idUsuarioCliente;
     private long idUsuarioProfissional;
+    private String nomeCliente;
+    private String nomeProfissional;
     private Date data;
     private Time horario;
 
@@ -32,6 +34,15 @@ public class Agendamento{
         this.horario = horario;
     }
 
+    public Agendamento(Long idAgendamento, String nomeCliente, String nomeProfissional, Date data, Time horario)
+    {
+        this.idAgendamento = idAgendamento;
+        this.nomeCliente = nomeCliente;
+        this.nomeProfissional = nomeProfissional;
+        this.data = data;
+        this.horario = horario;
+    }
+
     public long getIdAgendamento() {
         return idAgendamento;
     }
@@ -49,8 +60,25 @@ public class Agendamento{
     public long getIdUsuarioProfissional() {
         return idUsuarioProfissional;
     }
+
     public void setIdUsuarioProfissional(long idUsuarioProfissional) {
         this.idUsuarioProfissional = idUsuarioProfissional;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
+    public String getNomeProfissional() {
+        return nomeProfissional;
+    }
+
+    public void setNomeProfissional(String nomeProfissional) {
+        this.nomeProfissional = nomeProfissional;
     }
 
     public Date getData() {

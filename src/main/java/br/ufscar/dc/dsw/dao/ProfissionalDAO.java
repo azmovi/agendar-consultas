@@ -32,8 +32,9 @@ public class ProfissionalDAO extends GenericDAO {
                     Profissional profissional = new Profissional(idUsuario, nome, especialidade);
                     listaProfissionais.add(profissional);
                 }
+
+                statement.close();
             }
-            statement.close();
             conn.close();
         }
         catch (SQLException e)

@@ -28,31 +28,60 @@ public class UsuarioDAO extends GenericDAO {
             statementUsuario.setString(2, usuario.getEmail());
             statementUsuario.setString(3, usuario.getSenha());
             statementUsuario.setString(4, usuario.getCpf());
+            if (insercaoValida(conn, usuario.getEmail(), usuario.getCpf()))
+            {
+                statementUsuario.executeUpdate();
+                ResultSet generatedKeys = statementUsuario.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    idUsuario = generatedKeys.getLong(1);
 
-            statementUsuario.executeUpdate();
-
-            ResultSet generatedKeys = statementUsuario.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                idUsuario = generatedKeys.getLong(1);
-
-                if (usuario instanceof Cliente)
-                {
-                    Cliente cliente = (Cliente) usuario;
-                    insertCliente(conn, idUsuario, cliente);
+                    if (usuario instanceof Cliente)
+                    {
+                        Cliente cliente = (Cliente) usuario;
+                        insertCliente(conn, idUsuario, cliente);
+                    }
+                    else if (usuario instanceof Profissional)
+                    {
+                        insertProfissional(conn, idUsuario, (Profissional) usuario);
+                    }
                 }
-                else if (usuario instanceof Profissional)
-                {
-                    insertProfissional(conn, idUsuario, (Profissional) usuario);
-                }
+                statementUsuario.close();
+                conn.close();
             }
-            statementUsuario.close();
-            conn.close();
         }
         catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
         return idUsuario;
+    }
+
+
+    public boolean insercaoValida(Connection conn, String email, String cpf)
+    {
+        String sql = "SELECT email, cpf FROM Usuario WHERE email = ? or cpf = ? LIMIT 1";
+        boolean credenciaisValida = true;
+
+        try
+        {
+            PreparedStatement statement= conn.prepareStatement(sql);
+            statement.setString(1, email);
+            statement.setString(2, cpf);
+
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next()) {
+                    credenciaisValida = false;
+                }
+                statement.close();
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return credenciaisValida;
     }
 
     public void insertCliente(Connection conn, Long idUsuario, Cliente cliente) {

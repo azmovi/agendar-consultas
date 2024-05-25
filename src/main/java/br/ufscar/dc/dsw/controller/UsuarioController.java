@@ -68,7 +68,7 @@ public class UsuarioController extends HttpServlet {
         else
         {
             session.setAttribute("erroLogarUsuario", "Email ou Senha incorretos");
-            response.sendRedirect("/AgendarConsultas/login/login.jps");
+            response.sendRedirect("/AgendarConsultas/login/login.jsp");
         }
     }
 
