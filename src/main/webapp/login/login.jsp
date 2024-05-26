@@ -98,7 +98,7 @@
             <form action="/AgendarConsultas/usuario" method="GET">
                 <input type="hidden" name="action" value="login">
 
-                <h3>Login de Usuario</h3>
+                <h3><fmt:message key="login"/></h3>
 
                 <label for="Email">
                 <fmt:message key="email"/>

@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.controller;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +40,10 @@ public class UsuarioController extends HttpServlet {
                 invalidar(request, response, session);
                 break;
 
+            case "deletarUsuario":
+                deletarUsuario(request, response, session);
+                break;
+
             default:
                 invalidar(request, response, session);
                 break;
@@ -70,6 +75,25 @@ public class UsuarioController extends HttpServlet {
             session.setAttribute("erroLogarUsuario", "Email ou Senha incorretos");
             response.sendRedirect("/AgendarConsultas/login/login.jsp");
         }
+    }
+
+    protected void deletarUsuario(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
+    {
+        Long idUsuario =  Long.parseLong(request.getParameter("idUsuario"));
+
+        boolean deletado = usuarioDAO.deletarUsuario(idUsuario);
+
+        if (deletado) {
+            session.invalidate();
+            response.sendRedirect("/AgendarConsultas");
+        }
+        else
+        {
+            session.setAttribute("erroDeletar", "Nao foi possivel deletar seu usuario");
+            response.sendRedirect("/AgendarConsultas/perfil/usuario.jsp");
+
+        }
+
     }
 
     protected void invalidar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {

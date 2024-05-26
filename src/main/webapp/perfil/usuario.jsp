@@ -101,6 +101,12 @@
     <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
     <c:set var="path" value="/AgendarConsultas/perfil/atualizar" />
 
+    <c:if test="${not empty sessionScope.erroDeletar}">
+        <script>
+            alert('${sessionScope.erroDeletar}');
+        </script>
+        <c:remove var="erroDeletar" scope="session"/>
+    </c:if>
 
     <fmt:bundle basename="messages">
     <header>
@@ -148,6 +154,10 @@
             <div class="botao desconectar" onclick="desconectarUsuario()">
                 <fmt:message key="desconectar"/>
             </div>
+            <hr>
+            <div class="botao deletar" onclick="deletarUsuario()">
+                <fmt:message key="deletar"/>
+            </div>
         </div>
     </main>
     </fmt:bundle>
@@ -160,6 +170,12 @@
         }
         function minhasConsultas(){
             window.location.href = "/AgendarConsultas/agendamento?action=minhasConsultas&idUsuario=${idUsuario}";
+        }
+        function deletarUsuario(){
+            const confirmacao = confirm("Tem certeza que quer excluir sua conta?");
+            if (confirmacao){
+                window.location.href = "/AgendarConsultas/usuario?action=deletarUsuario&idUsuario=${idUsuario}";
+            }
         }
     </script>
 </body>

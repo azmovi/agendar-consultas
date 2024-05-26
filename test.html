@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BuscarX</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS";
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+
+        header {
+            display: grid;
+            grid-auto-flow: column;
+            place-items: center;
+        }
+
+        .titulo {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .usuario {
+            margin: 9%;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 5%;
+            justify-items: center;
+            display: grid;
+            grid-auto-flow: column;
+        }
+
+        .btn {
+            margin: 5px;
+            border: 4px solid black;
+            border-radius: 10px;
+            padding: 1em;
+            font-weight: bold;
+            font-size: 20px;
+            color: #000000;
+            text-decoration: none;
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+
+        .btn:hover {
+            color: #ffffff;
+            background-color: #000000;
+        }
+
+        main {
+            margin: 5%;
+            border: 4px solid black;
+            border-radius: 25px;
+            padding: 5%;
+        }
+
+        .tabela {
+            padding: 0% 0;
+            margin: 5px;
+            text-align: center;
+            border: solid;
+            border-radius: 15px;
+        }
+        .celula {
+            display: grid;
+            grid-auto-flow: column;
+            padding: 5%;
+        }
+
+        .botao {
+            width: 100%;
+            border: none;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.7s ease, color 0.4s ease;
+        }
+
+        .botao:hover .nome, .botao:hover .especialidade {
+            background-color: black;
+            color: white;
+        }
+
+        .nome {
+            transition: background-color 0.7s ease, color 0.4s ease;
+            font-size: 25px;
+        }
+
+        .especialidade {
+            transition: background-color 0.7s ease, color 0.4s ease;
+            font-size: 20px;
+        }
+
+        hr {
+            margin: 0%;
+            border: 1px solid black;
+        }
+        .ponta {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .meio {
+            font-size: 15px;
+        }
+
+        .seta {
+            display: grid;
+            grid-template-columns: 100% 1%;
+            align-items: center;
+
+        }
+        .triangulo {
+          width: 0; 
+          height: 0; 
+          border-top: 10px solid transparent;
+          border-bottom: 10px solid transparent;
+          border-left: 10px solid black;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="titulo">BuscarX</div>
+
+        <div class="usuario">
+            <a href="/AgendarConsultas/perfil/usuario.jsp" class="btn cliente">
+                ${cliente.nome}
+            </a>
+        </div>
+    </header>
+    <main>
+        <h1 align="center"> Lista de Agendamentos </h1>
+        <div class="tabela">
+            <div class="celula">
+                <div class="ponta">
+                    Alberto
+                </div>
+
+                <div class="meio">
+                    08:40 - 
+                    23/03/2030
+                    <div class="seta">
+                        <div class="linha"> <hr> </div>
+                        <div class="triangulo"> </div>
+                    </div>
+                </div>
+
+                <div class="ponta">
+                    Waldirene
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="celula">
+                <div class="ponta">
+                    Alberto
+                </div>
+
+                <div class="meio">
+                    data
+                    horario
+                </div>
+
+                <div class="ponta">
+                    Waldirene
+                </div>
+
+            </div>
+
+            <hr>
+
+        </div>
+    </main>
+</body>
+</html>

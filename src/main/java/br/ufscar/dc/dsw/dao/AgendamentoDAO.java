@@ -99,73 +99,42 @@ public class AgendamentoDAO extends GenericDAO {
 
         boolean dataValida = false;
 
-        if ( dataAgendamento.isAfter(diaAtual) || ( dataAgendamento.equals(diaAtual) && horarioAgendamento.isAfter(horarioAtual)))
+        if (dataAgendamento.isAfter(diaAtual) || ( dataAgendamento.equals(diaAtual) && horarioAgendamento.isAfter(horarioAtual)))
         {
-            if(dataValida(data) && horarioValido(horario))
-            {
-                dataValida = true;
-            }
+            dataValida = !existeConsulta(data, horario);
         }
 
         return dataValida;
     }
 
-    public boolean dataValida(Date data)
+    public boolean existeConsulta(Date data, Time horario)
     {
-        String sql= "SELECT data FROM Agendamento WHERE data = ?";
-        boolean dataValida = true;
-
+        String sql= "SELECT data, horario FROM Agendamento WHERE data = ? and horario = ? LIMIT 1";
+        boolean existeConsulta = false;
         try
         {
             Connection  conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
 
             statement.setDate(1, data);
+            statement.setTime(2, horario);
 
             try (ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
                 {
-                    dataValida = false;
+                    existeConsulta = true;
                 }
+                statement.close();
             }
             conn.close();
-            statement.close();
         }
         catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
 
-        return dataValida;
+        return existeConsulta;
     }
 
-    public boolean horarioValido(Time horario)
-    {
-        String sql= "SELECT horario FROM Agendamento WHERE horario = ?";
-        boolean horarioValido = true;
-
-        try
-        {
-            Connection  conn = this.getConnection();
-            PreparedStatement statement = conn.prepareStatement(sql);
-
-            statement.setTime(1, horario);
-
-            try (ResultSet resultSet = statement.executeQuery())
-            {
-                if (resultSet.next())
-                {
-                    horarioValido = false;
-                }
-            }
-            conn.close();
-            statement.close();
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-        return horarioValido;
-    }
 }

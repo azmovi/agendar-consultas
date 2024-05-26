@@ -109,6 +109,7 @@
     <c:set var="profissional" value="${sessionScope.profissional}" />
     <c:set var="listaProfissionais" value="${sessionScope.listaProfissionais}" />
     <c:set var="agendamento" value="${sessionScope.agendamento}" />
+    <c:set var="deletado" value="${sessionScope.deletado}" />
 
     <c:if test="${not empty agendamento}">
         <script>
@@ -179,6 +180,7 @@
                 }
             }
         }
+        console.log("${deletado}")
     </script>
 </body>
 </html>

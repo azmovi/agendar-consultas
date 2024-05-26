@@ -87,19 +87,38 @@
             color: white;
         }
 
-        .nome{
-            transition: background-color 0.7s ease, color 0.4s ease;
-            font-size: 25px;
-        }
-
-        .especialidade {
-            transition: background-color 0.7s ease, color 0.4s ease;
-            font-size: 20px;
-        }
-
         hr {
             margin: 0%;
             border: 1px solid black;
+        }
+
+        .celula {
+            display: grid;
+            grid-auto-flow: column;
+            padding: 5%;
+        }
+
+        .ponta {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .meio {
+            font-size: 15px;
+        }
+
+        .seta {
+            display: grid;
+            grid-template-columns: 100% 1%;
+            align-items: center;
+
+        }
+        .triangulo {
+          width: 0; 
+          height: 0; 
+          border-top: 10px solid transparent;
+          border-bottom: 10px solid transparent;
+          border-left: 10px solid black;
         }
 
     </style>
@@ -144,20 +163,24 @@
         </div>
     </header>
     <main>
-        <h1 align="center"> Lista de Profissionais </h1>
+        <h1 align="center"> Lista de Consultas </h1>
             <div class="tabela">
                 <c:forEach var="agendamento" items="${listaAgendamentoPorUsuario}">
-                    <div class="nome">
-                        ${agendamento.nomeCliente}
-                    </div>
-                    <div class="nome">
-                        ${agendamento.nomeProfissional}
-                    </div>
-                    <div class="data">
-                        ${agendamento.data}
-                    </div>
-                    <div class="horario">
-                        ${agendamento.horario}
+                    <div class="celula">
+                        <div class="ponta">
+                            ${agendamento.nomeCliente}
+                        </div>
+                        <div class="meio">
+                            ${agendamento.horario} |
+                            ${agendamento.data}
+                            <div class="seta">
+                                <div class="linha"> <hr> </div>
+                                <div class="triangulo"> </div>
+                            </div>
+                        </div>
+                        <div class="ponta">
+                            ${agendamento.nomeProfissional}
+                        </div>
                     </div>
                     <hr>
                 </c:forEach>

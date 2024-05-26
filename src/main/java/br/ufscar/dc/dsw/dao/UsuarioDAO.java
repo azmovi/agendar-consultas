@@ -369,4 +369,31 @@ public class UsuarioDAO extends GenericDAO {
         }
         return flag;
     }
+
+    public boolean deletarUsuario(long idUsuario)
+    {
+        String sql = "DELETE FROM Usuario WHERE id_usuario = ?";
+        boolean deletado = false;
+        try
+        {
+            Connection  conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+
+            statement.setLong(1, idUsuario);
+            int rowsAffected = statement.executeUpdate();
+        
+            if (rowsAffected > 0) 
+            {
+                deletado = true;
+            } 
+
+            statement.close();
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return deletado;
+    }
 }
