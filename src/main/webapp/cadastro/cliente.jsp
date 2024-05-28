@@ -136,6 +136,7 @@
                     name="cpf"
                     value="${sessionScope.cpf != null ? sessionScope.cpf : ''}"
                     required
+                    maxlength="11"
                 ><br>
 
                 <label for="sexo">

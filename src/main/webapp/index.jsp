@@ -102,7 +102,20 @@
             border: 1px solid black;
         }
 
+        .filtro {
+            text-align: right;
+        }
+
+        input {
+            width: 85%;
+            padding: 1%;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+
     </style>
+
 </head>
 <body>
     <c:set var="cliente" value="${sessionScope.cliente}" />
@@ -146,41 +159,48 @@
         </div>
     </header>
     <main>
+        <div class="filtro">
+            <label for="filtro">
+                Filtro:
+            </label>
+            <input type="filtro" id="filtro" name="filtro">
+        </div>
+
         <h1 align="center"> Lista de Profissionais </h1>
-            <div class="tabela">
-                <c:forEach var="profissional" items="${listaProfissionais}">
-                    <a id="consultarPerfil" class="botao" href="/AgendarConsultas/agendamento?action=consultarPerfil&IdProfissionalEscolhido=${profissional.idUsuario}">
-                        <div class="nome">
-                            ${profissional.nome}
-                        </div>
-                        <div class="especialidade">
-                            ${profissional.especialidade}
-                        </div>
-                    </a>
-                    <hr>
-                </c:forEach>
-            </div>
+        <div class="tabela">
+            <c:forEach var="profissional" items="${listaProfissionais}">
+                <a id="consultarPerfil" class="botao" href="/AgendarConsultas/agendamento?action=consultarPerfil&IdProfissionalEscolhido=${profissional.idUsuario}">
+                    <div class="nome">
+                        ${profissional.nome}
+                    </div>
+                    <div class="especialidade">
+                        ${profissional.especialidade}
+                    </div>
+                </a>
+                <hr>
+            </c:forEach>
+        </div>
     </main>
     </fmt:bundle>
+    <script src="/AgendarConsultas/js/tabela.js"> </script>
     <script>
-        window.onload = function() {
-            fetch("/AgendarConsultas/profissional")
-
-            var butaoConsultarPerfil = document.getElementById("consultarPerfil");
-            if(butaoConsultarPerfil != null){
-                butaoConsultarPerfil.onclick = function(event){
-                    var cliente = ${cliente != null ? 'true' : 'false'};
-                    var profissional = ${profissional != null ? 'true' : 'false'};
-
-                    if (!cliente && !profissional)
-                    {
-                        event.preventDefault();
-                        alert('Você precisa fazer login ou cadastro antes de acessar o perfil do Profissional.');
-                    }
-                }
-            }
-        }
-        console.log("${deletado}")
+    //    window.onload = function() {
+    //        fetch("/AgendarConsultas/profissional?action=listarProfissionais")
+    //
+    //        var butaoConsultarPerfil = document.getElementById("consultarPerfil");
+    //        if(butaoConsultarPerfil != null){
+    //            butaoConsultarPerfil.onclick = function(event){
+    //                var cliente = ${cliente != null ? 'true' : 'false'};
+    //                var profissional = ${profissional != null ? 'true' : 'false'};
+    //
+    //                if (!cliente && !profissional)
+    //                {
+    //                    event.preventDefault();
+    //                    alert('Você precisa fazer login ou cadastro antes de acessar o perfil do Profissional.');
+    //                }
+    //            }
+    //        }
+    //    }
     </script>
 </body>
 </html>

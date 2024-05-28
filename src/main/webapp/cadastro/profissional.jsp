@@ -145,6 +145,7 @@
                     id="cpf"
                     name="cpf"
                     value="${sessionScope.cpf != null ? sessionScope.cpf : ''}"
+                    maxlength="11"
                     required
                 ><br>
 
