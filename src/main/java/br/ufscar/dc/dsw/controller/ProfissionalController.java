@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
@@ -64,23 +62,27 @@ public class ProfissionalController extends HttpServlet {
     protected void listarProfissionais(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
     {
         List<Profissional> listaProfissionais = profissionalDAO.getAll();
-        session.setAttribute("listaProfissionais", listaProfissionais);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-        dispatcher.forward(request, response);
+
+        serialization(response, listaProfissionais);
     }
 
     protected void filtrar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
     {
+        String pesquisa = request.getParameter("pesquisa");
 
-        List<Profissional> listaProfissionais = profissionalDAO.getAll();
+        List<Profissional> listaProfissionais = profissionalDAO.getByFilter(pesquisa);
+
+        serialization(response, listaProfissionais);
+    }
+
+    protected void serialization(HttpServletResponse response, List<Profissional> data) throws ServletException, IOException
+    {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         Gson gson = new Gson();
-        String json = gson.toJson(listaProfissionais);
-
-
+        String json = gson.toJson(data);
         PrintWriter out = response.getWriter();
         out.print(json);
         out.flush();

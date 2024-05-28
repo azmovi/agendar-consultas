@@ -44,6 +44,43 @@ public class ProfissionalDAO extends GenericDAO {
         return listaProfissionais;
     }
 
+    public List<Profissional> getByFilter(String pesquisa) {
+
+        List<Profissional> listaProfissionais = new ArrayList<>();
+
+        String sql = "SELECT Usuario.id_usuario, Usuario.nome, Profissional.especialidade FROM Profissional JOIN Usuario ON Usuario.id_usuario = Profissional.id_usuario WHERE UPPER(Profissional.especialidade) LIKE ?";
+
+        try
+        {
+            Connection conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+
+            String pesquisaFormatada = "%" + pesquisa.toUpperCase() + "%";
+
+            statement.setString(1, pesquisaFormatada);
+
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                while (resultSet.next())
+                {
+                    Long idUsuario = resultSet.getLong("id_usuario");
+                    String nome = resultSet.getString("nome");
+                    String especialidade = resultSet.getString("especialidade");
+                    Profissional profissional = new Profissional(idUsuario, nome, especialidade);
+                    listaProfissionais.add(profissional);
+                }
+
+                statement.close();
+            }
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return listaProfissionais;
+    }
+
     public Profissional getProfissional(long idUsuario) {
 
         String sql = "SELECT nome, email, cpf, especialidade, pdf_data FROM Usuario JOIN Profissional ON Usuario.id_usuario = Profissional.id_usuario WHERE Usuario.id_usuario = ?";
