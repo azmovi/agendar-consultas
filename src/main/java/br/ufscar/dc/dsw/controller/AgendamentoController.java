@@ -16,6 +16,8 @@ import br.ufscar.dc.dsw.domain.Agendamento;
 import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
+import com.sendgrid.helpers.mail.objects.Email;
+import br.ufscar.dc.dsw.util.EmailService;
 import br.ufscar.dc.dsw.dao.AgendamentoDAO;
 import br.ufscar.dc.dsw.dao.ProfissionalDAO;
 
@@ -27,11 +29,13 @@ public class AgendamentoController extends HttpServlet {
 
     private AgendamentoDAO agendamentoDAO;
     private ProfissionalDAO profissionalDAO;
+    private EmailService emailservice;
 
     @Override
     public void init() {
         agendamentoDAO = new AgendamentoDAO();
         profissionalDAO = new ProfissionalDAO();
+        emailservice = new EmailService();
     }
 
     @Override
@@ -54,7 +58,6 @@ public class AgendamentoController extends HttpServlet {
                 break;
         }
     }
-
 
     protected void consultarPerfil(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException
     {
@@ -100,9 +103,13 @@ public class AgendamentoController extends HttpServlet {
 
         Long idUsuarioCliente = null;
         Long idUsuarioProfissional = null;
+        String email = "";
+        String nome = "";
 
         if (objCliente instanceof Cliente) {
             Cliente cliente = (Cliente) objCliente;
+            email = cliente.getEmail();
+            nome = cliente.getNome();
             idUsuarioCliente = cliente.getIdUsuario();
         }
         
@@ -129,6 +136,24 @@ public class AgendamentoController extends HttpServlet {
 
             if (idAgendamento != 0){
                 agendamento.setIdAgendamento(idAgendamento);
+
+                    EmailService service = new EmailService();
+                    
+                    Email from = new Email("vitorinumaru@estudanteufscar.br", "Convênio B");
+                    Email to = new Email(email, nome);
+            
+                    String subject1 = "Confirmação de Consulta";
+                    //String subject2 = "Confirmação de Consulta";
+            
+                    String body1 = nome + ", sua consulta foi agendada!";
+                    //String body2 = "Exemplo mensagem com Anexo (SendGrid/Java)";
+            
+                    // Envio sem anexo
+                    service.send(from, to, subject1, body1);
+            
+                    // Envio com anexo
+                    //service.send(from, to, subject2, body2, new File("SIGA.pdf"));
+
                 session.setAttribute("agendamento", agendamento);
                 session.setAttribute("agendamentoFeito", "Seu agendamento foi cadastrado");
                 response.sendRedirect("/AgendarConsultas");
@@ -138,15 +163,16 @@ public class AgendamentoController extends HttpServlet {
             {
                 session.setAttribute("erroAgendamento", "Não foi possivel fazer o agendamento");
             }
-        }
-        else
-        {
-            session.setAttribute("erroAgendamento", "Data ou horário invalidos/indisponiveis");
-        }
+            }
+            else
+            {
+                session.setAttribute("erroAgendamento", "Data ou horário invalidos/indisponiveis");
+            }
 
         session.setAttribute("data", data);
         session.setAttribute("horario", horario);
         response.sendRedirect("/AgendarConsultas/forms_agendamento.jsp");
+        
     }
 
     protected void invalidar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
