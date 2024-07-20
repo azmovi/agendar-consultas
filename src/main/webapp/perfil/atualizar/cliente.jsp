@@ -105,7 +105,7 @@
                     id="nome"
                     name="nome"
                     value="${sessionScope.cliente.nome != null ? sessionScope.cliente.nome : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="email">
@@ -116,7 +116,7 @@
                     id="email"
                     name="email"
                     value="${sessionScope.cliente.email != null ? sessionScope.cliente.email : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="senha">
@@ -127,18 +127,19 @@
                     id="senha"
                     name="senha"
                     value="${sessionScope.cliente.senha != null ? sessionScope.cliente.senha : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="cpf">
                     <fmt:message key="cpf"/>
                 </label> <br>
                 <input
-                    type="number"
+                    type="text"
                     id="cpf"
                     name="cpf"
+                    maxlength="14"
                     value="${sessionScope.cliente.cpf != null ? sessionScope.cliente.cpf : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="sexo">
@@ -164,7 +165,7 @@
                     type="date"
                     id="nascimento"
                     name="nascimento"
-                    required
+                    
                     value="${sessionScope.cliente.dataNascimento!= null ? sessionScope.cliente.dataNascimento: ''}"
                 ><br>
 
@@ -177,7 +178,92 @@
         </div>
     </fmt:bundle>
     <script>
+        // Função para formatar CPF com máscara
+        function formatCPF(cpf) {
+            return cpf
+                .replace(/\D/g, '') // Remove caracteres não numéricos
+                .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4'); // Adiciona a máscara
+        }
+
+        // Função para remover a máscara do CPF
+        function unformatCPF(cpf) {
+            return cpf.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        }
+
+        function validateForm(event) {
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
+
+            if (!nome) {
+                alert('Nome é obrigatório.');
+                return false;
+            }
+
+            if (!email) {
+                alert('Email inválido.');
+                return false;
+            }
+
+            if (!senha) {
+                alert('Senha é obrigatória.');
+                return false;
+            }
+
+            if (!cpf) {
+                alert('CPF é obrigatório e deve ter 11 dígitos.');
+                return false;
+            }
+
+            if (!nascimento) {
+                alert('Data de nascimento é obrigatória.');
+                return false;
+            }
+
+            // Remover a máscara do CPF antes de enviar
+            document.getElementById('cpf').value = unformatCPF(cpf);
+            return true;
+        }
+
+        function formatDateToYYYYMMDD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function validateDate() {
+            const dateInput = document.getElementById('nascimento');
+            const today = new Date();
+            const formattedDate = formatDateToYYYYMMDD(today);
+
+            // Definir o atributo max
+            dateInput.setAttribute('max', formattedDate);
+
+            // Adicionar o manipulador de eventos para validar a data selecionada
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                if (selectedDate > today) {
+                    alert('A data não pode ser no futuro.');
+                    this.value = ''; // Limpar o campo se a data for inválida
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('forms').addEventListener('submit', function(event) {
+                if (!validateForm(event)) {
+                    event.preventDefault(); // Impede o envio do formulário se a validação falhar
+                }
+            });
+            const cpfInput = document.getElementById('cpf');
+            cpfInput.addEventListener('input', function() {
+                this.value = formatCPF(unformatCPF(this.value));
+            });
+            document.getElementById('nascimento').addEventListener('input', validateDate);
+        });
     </script>
 </body>
 </html>
-

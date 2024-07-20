@@ -104,7 +104,7 @@
                     id="nome"
                     name="nome"
                     value="${sessionScope.profissional.nome != null ? sessionScope.profissional.nome : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="email">
@@ -115,7 +115,7 @@
                     id="email"
                     name="email"
                     value="${sessionScope.profissional.email != null ? sessionScope.profissional.email : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="senha">
@@ -126,18 +126,18 @@
                     id="senha"
                     name="senha"
                     value="${sessionScope.profissional.senha != null ? sessionScope.profissional.senha : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="cpf">
                     <fmt:message key="cpf"/>
                 </label> <br>
                 <input
-                    type="number"
+                    type="text"
                     id="cpf"
                     name="cpf"
                     value="${sessionScope.profissional.cpf != null ? sessionScope.profissional.cpf : ''}"
-                    required
+                    
                 ><br>
 
                 <label for="especialidade">
@@ -148,7 +148,7 @@
                     id="especialidade" 
                     name="especialidade"
                     value="${sessionScope.profissional.especialidade != null ? sessionScope.profissional.especialidade: ''}"
-                    required
+                    
                 ><br>
 
                 <label for="curriculo">
@@ -160,7 +160,7 @@
                     id="pdfData"
                     name="pdfData"
                     value="${sessionScope.profissional.pdfData != null ? sessionScope.profissional.pdfData: ''}"
-                    required
+                    
                 ><br>
 
                 <input
@@ -172,7 +172,78 @@
         </div>
     </fmt:bundle>
     <script>
+        // Função para formatar CPF com máscara
+        function formatCPF(cpf) {
+            return cpf
+                .replace(/\D/g, '') // Remove caracteres não numéricos
+                .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4'); // Adiciona a máscara
+        }
+
+        // Função para remover a máscara do CPF
+        function unformatCPF(cpf) {
+            return cpf.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        }
+
+        // Função para verificar e alertar sobre validade dos campos
+        function validateForm() {
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const especialidade = document.getElementById('especialidade').value.trim();
+            const pdf = document.getElementById('pdfData');
+            const file = pdf.files[0];
+
+            // Validar obrigatoriedade dos campos
+            if (!nome) {
+                alert('O campo Nome é obrigatório.');
+                return false;
+            }
+            if (!email) {
+                alert('O campo Email é obrigatório.');
+                return false;
+            }
+            if (!senha) {
+                alert('O campo Senha é obrigatório.');
+                return false;
+            }
+            if (!cpf) {
+                alert('O campo CPF é obrigatório.');
+                return false;
+            }
+            if (!especialidade) {
+                alert('O campo Especialidade é obrigatório.');
+                return false;
+            }
+            if (!file) {
+                alert('O campo Currículo é obrigatório e deve ser um arquivo PDF.');
+                return false;
+            }
+            if (file.type !== 'application/pdf') {
+                alert('O currículo deve ser um arquivo PDF.');
+                return false;
+            }
+
+            // Remover a máscara do CPF antes de enviar
+            document.getElementById('cpf').value = unformatCPF(cpf);
+
+            return true;
+        }
+
+        // Configurar validações e máscara ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            const cpfInput = document.getElementById('cpf');
+            cpfInput.addEventListener('input', function() {
+                this.value = formatCPF(unformatCPF(this.value));
+            });
+
+            const form = document.getElementById('forms');
+            form.addEventListener('submit', function(event) {
+                if (!validateForm()) {
+                    event.preventDefault(); // Impede o envio do formulário se a validação falhar
+                }
+            });
+        });
     </script>
 </body>
 </html>
-

@@ -15,13 +15,11 @@
             border-radius: 25px;
             padding: 5%;
         }
-
         header {
             display: grid;
             grid-auto-flow: column;
             place-items: center;
         }
-
         .btn {
             margin: 5%;
             border: 4px solid black;
@@ -34,27 +32,22 @@
             text-decoration: none; 
             transition: background-color 0.7s ease, color 0.4s ease;
         }
-
         .btn:hover {
             color: #ffffff;
             background-color: #000000;
         }
-
         .formulario {
             margin: 5%;
             border: 4px solid black;
             border-radius: 25px;
             padding: 5%;
         }
-
         h3 {
             margin-top: -5%;
         }
-
         label {
             font-weight: bold;
         }
-
         input, select {
             width: 85%;
             margin: 2%;
@@ -63,7 +56,6 @@
             border: 4px solid black;
             border-radius: 10px;
         }
-
         .confirmar {
             margin-left: 30%;
             margin-right: 30%;
@@ -73,7 +65,6 @@
             width: 35%;
             transition: border-color 0.3s ease, color 0.4s ease;
         }
-
         .confirmar:hover {
             background-color: #28e673;
             border-color: white;
@@ -85,7 +76,7 @@
         <script>
             alert('${sessionScope.ErrorCriarNovoUsuario}');
         </script>
-        <c:remove var="erroNovoUsuario" scope="session"/>
+        <c:remove var="ErrorCriarNovoUsuario" scope="session"/>
     </c:if>
 
     <fmt:bundle basename="messages">
@@ -111,8 +102,6 @@
                     type="text"
                     id="nome"
                     name="nome"
-                    value="${sessionScope.nome != null ? sessionScope.nome : ''}"
-                    required
                 ><br>
 
                 <label for="email">
@@ -122,8 +111,6 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="${sessionScope.email != null ? sessionScope.email : ''}"
-                    required
                 ><br>
 
                 <label for="senha">
@@ -133,20 +120,16 @@
                     type="password"
                     id="senha"
                     name="senha"
-                    value="${sessionScope.senha != null ? sessionScope.senha : ''}"
-                    required
                 ><br>
 
                 <label for="cpf">
                     <fmt:message key="cpf"/>
                 </label> <br>
                 <input
-                    type="number"
+                    type="text"
                     id="cpf"
                     name="cpf"
-                    value="${sessionScope.cpf != null ? sessionScope.cpf : ''}"
-                    maxlength="11"
-                    required
+                    maxlength="14"
                 ><br>
 
                 <label for="especialidade">
@@ -156,8 +139,6 @@
                     type="text"
                     id="especialidade" 
                     name="especialidade"
-                    value="${sessionScope.especialidade != null ? sessionScope.especialidade: ''}"
-                    required
                 ><br>
 
                 <label for="curriculo">
@@ -165,21 +146,94 @@
                 </label> <br>
                 <input
                     type="file"
-                    accpet="application/pdf"
                     id="pdfData"
                     name="pdfData"
-                    required
+                    accept="application/pdf"
                 ><br>
 
                 <input
                     type="submit"
                     class="confirmar"
-                    value="<fmt:message key="confirmar"/>"
+                    value="<fmt:message key='confirmar'/>"
                 >
             </form>
         </div>
 
     </fmt:bundle>
+
+    <script>
+        // Função para formatar CPF com máscara
+        function formatCPF(cpf) {
+            return cpf
+                .replace(/\D/g, '') // Remove caracteres não numéricos
+                .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4'); // Adiciona a máscara
+        }
+
+        // Função para remover a máscara do CPF
+        function unformatCPF(cpf) {
+            return cpf.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        }
+
+        // Função para verificar e alertar sobre validade dos campos
+        function validateForm() {
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const especialidade = document.getElementById('especialidade').value.trim();
+            const pdf = document.getElementById('pdfData');
+            const file = pdf.files[0];
+
+            // Validar obrigatoriedade dos campos
+            if (!nome) {
+                alert('O campo Nome é obrigatório.');
+                return false;
+            }
+            if (!email) {
+                alert('O campo Email é obrigatório.');
+                return false;
+            }
+            if (!senha) {
+                alert('O campo Senha é obrigatório.');
+                return false;
+            }
+            if (!cpf) {
+                alert('O campo CPF é obrigatório.');
+                return false;
+            }
+            if (!especialidade) {
+                alert('O campo Especialidade é obrigatório.');
+                return false;
+            }
+            if (!file) {
+                alert('O campo Currículo é obrigatório e deve ser um arquivo PDF.');
+                return false;
+            }
+            if (file.type !== 'application/pdf') {
+                alert('O currículo deve ser um arquivo PDF.');
+                return false;
+            }
+
+            // Remover a máscara do CPF antes de enviar
+            document.getElementById('cpf').value = unformatCPF(cpf);
+
+            return true;
+        }
+
+        // Configurar validações e máscara ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            const cpfInput = document.getElementById('cpf');
+            cpfInput.addEventListener('input', function() {
+                this.value = formatCPF(unformatCPF(this.value));
+            });
+
+            const form = document.getElementById('form');
+            form.addEventListener('submit', function(event) {
+                if (!validateForm()) {
+                    event.preventDefault(); // Impede o envio do formulário se a validação falhar
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
