@@ -154,7 +154,7 @@ public class ProfissionalController extends HttpServlet {
     protected void atualizar(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 
         long idUsuario = 0;
-        Object obj = session.getAttribute("cliente");
+        Object obj = session.getAttribute("profissional");
 
         if (obj instanceof Profissional) {
             Profissional profissional = (Profissional) obj;
