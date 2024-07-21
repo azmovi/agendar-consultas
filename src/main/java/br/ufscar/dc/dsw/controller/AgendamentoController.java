@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.mail.internet.InternetAddress;
 
 import br.ufscar.dc.dsw.domain.Agendamento;
 import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Profissional;
 import br.ufscar.dc.dsw.util.Conversor;
-import com.sendgrid.helpers.mail.objects.Email;
 import br.ufscar.dc.dsw.util.EmailService;
 import br.ufscar.dc.dsw.dao.AgendamentoDAO;
 import br.ufscar.dc.dsw.dao.ProfissionalDAO;
@@ -29,13 +29,13 @@ public class AgendamentoController extends HttpServlet {
 
     private AgendamentoDAO agendamentoDAO;
     private ProfissionalDAO profissionalDAO;
-    private EmailService emailservice;
+    private EmailService emailService;
 
     @Override
     public void init() {
         agendamentoDAO = new AgendamentoDAO();
         profissionalDAO = new ProfissionalDAO();
-        emailservice = new EmailService();
+        emailService = new EmailService();
     }
 
     @Override
@@ -134,25 +134,22 @@ public class AgendamentoController extends HttpServlet {
         {
             long idAgendamento = agendamentoDAO.cadastrarConsulta(agendamento);
 
-            if (idAgendamento != 0){
+            if (idAgendamento != 0)
+            {
                 agendamento.setIdAgendamento(idAgendamento);
 
-                    EmailService service = new EmailService();
-                    
-                    Email from = new Email("vitorinumaru@estudanteufscar.br", "Convênio B");
-                    Email to = new Email(email, nome);
-            
-                    String subject1 = "Confirmação de Consulta";
-                    //String subject2 = "Confirmação de Consulta";
-            
-                    String body1 = nome + ", sua consulta foi agendada!";
-                    //String body2 = "Exemplo mensagem com Anexo (SendGrid/Java)";
-            
-                    // Envio sem anexo
-                    service.send(from, to, subject1, body1);
-            
-                    // Envio com anexo
-                    //service.send(from, to, subject2, body2, new File("SIGA.pdf"));
+                // TODO: Tirar meu email da reta
+                InternetAddress from = new InternetAddress("azevedoantonio@estudante.ufscar.br", "Antonio");
+                InternetAddress to = new InternetAddress(email, nome);
+
+                String subject1 = "Confirmação de Consulta";
+        
+                String body1 = nome + ", sua consulta foi agendada!";
+        
+                // Envio sem anexo
+                emailService.send(from, to, subject1, body1);
+                // Envio com anexo
+                //service.send(from, to, subject2, body2, new File("SIGA.pdf"));
 
                 session.setAttribute("agendamento", agendamento);
                 session.setAttribute("agendamentoFeito", "Seu agendamento foi cadastrado");
@@ -163,11 +160,11 @@ public class AgendamentoController extends HttpServlet {
             {
                 session.setAttribute("erroAgendamento", "Não foi possivel fazer o agendamento");
             }
-            }
-            else
-            {
-                session.setAttribute("erroAgendamento", "Data ou horário invalidos/indisponiveis");
-            }
+        }
+        else
+        {
+            session.setAttribute("erroAgendamento", "Data ou horário invalidos/indisponiveis");
+        }
 
         session.setAttribute("data", data);
         session.setAttribute("horario", horario);

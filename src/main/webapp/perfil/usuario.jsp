@@ -166,7 +166,10 @@
          window.location.href = "${path}";
         }
         function desconectarUsuario(){
-            window.location.href = "/AgendarConsultas/usuario?action=logout";
+            const confirmacao = confirm("Tem certeza que quer desconectar da sua conta?");
+            if (confirmacao){
+                window.location.href = "/AgendarConsultas/usuario?action=logout";
+            }
         }
         function minhasConsultas(){
             window.location.href = "/AgendarConsultas/agendamento?action=minhasConsultas&idUsuario=${idUsuario}";
