@@ -143,8 +143,10 @@ public class AgendamentoController extends HttpServlet {
                 InternetAddress to = new InternetAddress(email, nome);
 
                 String subject1 = "Confirmação de Consulta";
+                String msg = " ,sua consulta foi agendada! Entre na reuniao com esse link: ";
+                String link = "https://theuselessweb.com/";
         
-                String body1 = nome + ", sua consulta foi agendada!";
+                String body1 = nome + msg + link;
         
                 // Envio sem anexo
                 emailService.send(from, to, subject1, body1);
