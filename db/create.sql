@@ -16,7 +16,6 @@ create table Profissional(
     id_profissional bigint not null auto_increment PRIMARY KEY,
     id_usuario bigint not null,
     especialidade varchar(50) not null,
-    pdf_data longblob not null,
     FOREIGN KEY(id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
