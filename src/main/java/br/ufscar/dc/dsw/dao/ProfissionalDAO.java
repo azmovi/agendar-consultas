@@ -83,7 +83,7 @@ public class ProfissionalDAO extends GenericDAO {
 
     public Profissional getProfissional(long idUsuario) {
 
-        String sql = "SELECT nome, email, cpf, especialidade, pdf_data FROM Usuario JOIN Profissional ON Usuario.id_usuario = Profissional.id_usuario WHERE Usuario.id_usuario = ?";
+        String sql = "SELECT nome, email, cpf, especialidade FROM Usuario JOIN Profissional ON Usuario.id_usuario = Profissional.id_usuario WHERE Usuario.id_usuario = ?";
         Profissional profissional = null;
 
         try
@@ -101,8 +101,7 @@ public class ProfissionalDAO extends GenericDAO {
                     String email = resultSet.getString("email");
                     String cpf = resultSet.getString("cpf");
                     String especialidade = resultSet.getString("especialidade");
-                    byte[] pdfData = resultSet.getBytes("pdf_data");
-                    profissional = new Profissional(idUsuario, nome, email, cpf, especialidade, pdfData);
+                    profissional = new Profissional(idUsuario, nome, email, cpf, especialidade);
                 }
             }
             statement.close();

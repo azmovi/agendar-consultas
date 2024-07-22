@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import br.ufscar.dc.dsw.domain.Profissional;
-import br.ufscar.dc.dsw.util.Conversor;
+import br.ufscar.dc.dsw.util.UploadFile;
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 import br.ufscar.dc.dsw.dao.ProfissionalDAO;
 
@@ -26,11 +26,13 @@ public class ProfissionalController extends HttpServlet {
 
     private UsuarioDAO usuarioDAO;
     private ProfissionalDAO profissionalDAO;
+    private UploadFile uploadFile;
 
     @Override
     public void init() {
         usuarioDAO = new UsuarioDAO();
         profissionalDAO = new ProfissionalDAO();
+        uploadFile = new UploadFile();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -124,15 +126,15 @@ public class ProfissionalController extends HttpServlet {
 
         String especialidade = request.getParameter("especialidade");
 
-        Conversor conversor = new Conversor();
 
-        String pdfString = request.getParameter("pdfData");
-        byte[] pdfData = conversor.StringParaPdf(pdfString);
+        //File Upload
+        //String pdfString = request.getParameter("pdfData");
 
-        Profissional profissional = new Profissional(nome, email, senha, cpf, especialidade, pdfData);
+        Profissional profissional = new Profissional(nome, email, senha, cpf, especialidade);
         long idUsuario = usuarioDAO.inserirUsuario(profissional);
         if (idUsuario != 0)
         {
+            uploadFile.processarUpload(request, idUsuario);
             profissional.setIdUsuario(idUsuario);
             session.setAttribute("profissional", profissional);
             response.sendRedirect("/AgendarConsultas");
@@ -144,7 +146,6 @@ public class ProfissionalController extends HttpServlet {
             session.setAttribute("senha", senha);
             session.setAttribute("cpf", cpf);
             session.setAttribute("especialidade", especialidade);
-            session.setAttribute("pdfString", pdfString);
 
             session.setAttribute("ErrorCriarNovoUsuario", "Este EMAIL ou CPF já está em uso.");
             response.sendRedirect("/AgendarConsultas/cadastro/profissional.jsp");
@@ -166,13 +167,9 @@ public class ProfissionalController extends HttpServlet {
         String senha = request.getParameter("senha");
         String cpf = request.getParameter("cpf");
         String especialidade = request.getParameter("especialidade");
-        String pdfString = request.getParameter("pdfData");
-
-        Conversor conversor = new Conversor();
-        byte[] pdfData = conversor.StringParaPdf(pdfString);
 
 
-        Profissional profissional = new Profissional(idUsuario, nome, email, senha, cpf, especialidade, pdfData);
+        Profissional profissional = new Profissional(idUsuario, nome, email, senha, cpf, especialidade);
 
         boolean deuCerto = usuarioDAO.updateUsuario(profissional);
         if (deuCerto)

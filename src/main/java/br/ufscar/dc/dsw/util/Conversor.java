@@ -37,12 +37,6 @@ public class Conversor {
             return Sexo.OUTRO;
         }
     }
-    public byte[] StringParaPdf(String pdfString)
-    {
-        byte[] pdfData = pdfString.getBytes(StandardCharsets.UTF_8);
-
-        return pdfData;
-    }
 
     public Time StringParaHorario(String horarioString)
     {
