@@ -99,3 +99,7 @@ Antônio Cícero, Lucas Velloso, Lucas Roberto, Vitor Yuki.
 - [ ] Não implementado
 ##### Divisão na implementação da funcionalidade: 
 Antônio Cícero, Vitor Yuki.
+
+#### Obs: 
+Não Conseguimos fazer o upload de arquivo dessa forma apenas o nome do arquivo
+é guardado no nosso banco de dados.
