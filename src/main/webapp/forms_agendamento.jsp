@@ -220,14 +220,35 @@
             <label for="horario">
                 <fmt:message key="horario" />
             </label>
-            <input
+            <!-- <input
                 type="time"
                 id="horario"
                 name="horario"
                 step="1"
                 value="${sessionScope.horario != null ? sessionScope.horario : ''}"
                 required
-            >
+            > -->
+            <select name="horario"
+                id="horario"
+                step="1"
+                required>
+                    <option>08:00</option>
+                    <option>08:30</option>
+                    <option>09:00</option>
+                    <option>09:30</option>
+                    <option>10:00</option>
+                    <option>10:30</option>
+                    <option>11:00</option>
+                    <option>11:30</option>
+                    <option>14:00</option>
+                    <option>14:30</option>
+                    <option>15:00</option>
+                    <option>15:30</option>
+                    <option>16:00</option>
+                    <option>16:30</option>
+                    <option>17:00</option>
+                    <option>17:30</option>
+            </select>
 
             <input
                 type="submit"
